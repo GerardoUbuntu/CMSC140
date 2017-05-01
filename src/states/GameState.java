@@ -4,22 +4,33 @@ import java.awt.Graphics;
 
 import Imageloader.Assets;
 import entities.Slender;
+import main.Handler;
+import map.Map;
 
 public class GameState extends State{
 	
 	private Slender slender;
+	private Map map;
 	
-	public GameState() {
-		slender = new Slender(100, 100);
+	public GameState(Handler handler) {
+		super(handler);
+		map = new Map(handler,"res/map/map1.txt");
+		handler.setMap(map);
+		
+		slender = new Slender(handler,100, 100);	
+	
 	}
 	@Override
 	public void update() {
+		map.update();
 		slender.update();
 	}
 
 	@Override
 	public void render(Graphics g) {
 		  g.drawImage(Assets.back, 0, 0, null);
+		  map.render(g);
 		  slender.render(g);
+		 
 	}
 }

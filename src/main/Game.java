@@ -3,6 +3,7 @@ package main;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import Imageloader.Assets;
+import listeners.KeyManager;
 import states.GameState;
 import states.State;
 
@@ -15,20 +16,26 @@ public class Game implements Runnable {
 	private boolean running = false;
 	private BufferStrategy bs;
 	private Graphics g;
-	
+	//states
 	private State gameState;
 	
+	//input
+	private KeyManager keyManager;
+	
+	//
+	private GameCamera gameCamera;
+	private Handler handler;
     
 	public Game(String title, int width, int height) {
 		this.height = height;
 		this.width = width;
 		this.title = title;
+		keyManager = new KeyManager();
 	}
 
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		
 		init();
 		int fps = 60;
@@ -62,14 +69,44 @@ public class Game implements Runnable {
 	}
 	
 	private void init() {
-		window = new GameWindow(title, width, height);	
+		window = new GameWindow(title, width, height);
+		window.getFrame().addKeyListener(keyManager);
+		handler = new Handler(this);
+		gameCamera = new GameCamera(handler,0,0);
+		
 		Assets.init();
 		
-		gameState = new GameState();
+		gameState = new GameState(handler);
 		State.setState(gameState);
 	}
 	
+	
+	public int getHeight() {
+		return height;
+	}
+
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+
+	public int getWidth() {
+		return width;
+	}
+
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+
+	public GameCamera getGameCamera() {
+		return gameCamera;
+	}
+
 	private void update(){
+		keyManager.tick();
 		if(State.getState() != null)
 			State.getState().update();
 	}
@@ -89,6 +126,10 @@ public class Game implements Runnable {
 		  bs.show();
 		  g.dispose();
 	}
+    
+    public KeyManager getKeyManager(){
+    	return keyManager;
+    }
 
 
 	public synchronized void start(){
