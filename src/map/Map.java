@@ -35,7 +35,7 @@ public class Map {
 	}
 	
 	public Tile getTile(int x, int y){
-		if(x < 0 || y < 0 || x >= width || y >= width)
+		if(x < 0 || y < 0 || x >= width || y >= height)
 			return Tile.grassTile;
 		
 		Tile t = Tile.tiles[tiles[x][y]];
@@ -50,7 +50,8 @@ public class Map {
 		width = Utils.parseInt(tokens[0]);
 		height = Utils.parseInt(tokens[1]);
 	
-		
+		System.out.println("Width " + width);
+		System.out.println("Height " + height);
 		tiles = new int[width][height];
 		for(int y = 0;y < height;y++){
 			for(int x = 0;x < width;x++){
@@ -67,3 +68,4 @@ public class Map {
 		return width;
 	}
 }
+	
