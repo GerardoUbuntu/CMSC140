@@ -3,6 +3,8 @@ package map;
 import java.awt.Graphics;
 
 import Imageloader.Utils;
+import entities.EntityManager;
+import entities.Slender;
 import main.Handler;
 import tile.Tile;
 
@@ -11,13 +13,16 @@ public class Map {
 	private int width,height;
 	private int[][] tiles;
 	private Handler handler;
+	
+	private EntityManager entityManager;
 	public Map(Handler handler,String path) {
 	   this.handler = handler;
+	   entityManager = new EntityManager(handler, new Slender(handler, 100, 100));
 	   loadMap(path);
 	}
 	
 	public void update(){
-		
+	    entityManager.update();
 	}
 	
 	public void render(Graphics g){
@@ -32,6 +37,7 @@ public class Map {
 						(int) (y * Tile.TILE_HEIGHT - handler.getGameCamera().getyOffset()));
 			}
 		}
+		entityManager.render(g);
 	}
 	
 	public Tile getTile(int x, int y){
