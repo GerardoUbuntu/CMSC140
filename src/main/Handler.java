@@ -1,6 +1,7 @@
 package main;
 
 import listeners.KeyManager;
+import listeners.MouseManager;
 import map.Map;
 
 public class Handler {
@@ -42,6 +43,10 @@ public class Handler {
 
 	public void setMap(Map map) {
 		this.map = map;
+	}
+	
+	public MouseManager getMouseManager(){
+		return game.getMouseManager();
 	}
 
 

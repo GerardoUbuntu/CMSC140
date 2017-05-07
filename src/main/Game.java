@@ -4,7 +4,9 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import Imageloader.Assets;
 import listeners.KeyManager;
+import listeners.MouseManager;
 import states.GameState;
+import states.MenuState;
 import states.State;
 
 public class Game implements Runnable {
@@ -17,10 +19,11 @@ public class Game implements Runnable {
 	private BufferStrategy bs;
 	private Graphics g;
 	//states
-	private State gameState;
-	
+	public State gameState;
+	public State menuState;
 	//input
 	private KeyManager keyManager;
+	private MouseManager mouseManager;
 	
 	//
 	private GameCamera gameCamera;
@@ -31,6 +34,12 @@ public class Game implements Runnable {
 		this.width = width;
 		this.title = title;
 		keyManager = new KeyManager();
+		mouseManager = new MouseManager();
+	}
+
+
+	public MouseManager getMouseManager() {
+		return mouseManager;
 	}
 
 
@@ -71,13 +80,17 @@ public class Game implements Runnable {
 	private void init() {
 		window = new GameWindow(title, width, height);
 		window.getFrame().addKeyListener(keyManager);
+		window.getFrame().addMouseListener(mouseManager);
+		window.getFrame().addMouseMotionListener(mouseManager);
+		window.getCanvas().addMouseListener(mouseManager);
+		window.getCanvas().addMouseMotionListener(mouseManager);
 		handler = new Handler(this);
 		gameCamera = new GameCamera(handler,0,0);
-		
 		Assets.init();
 		
 		gameState = new GameState(handler);
-		State.setState(gameState);
+		menuState = new MenuState(handler);
+		State.setState(menuState);
 	}
 	
 	
@@ -150,6 +163,16 @@ public class Game implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+
+	public GameWindow getWindow() {
+		return window;
+	}
+
+
+	public void setWindow(GameWindow window) {
+		this.window = window;
 	}
 
 }

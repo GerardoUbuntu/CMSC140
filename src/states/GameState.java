@@ -19,12 +19,13 @@ public class GameState extends State{
 	@Override
 	public void update() {
 		map.update();
-
+        if(handler.getKeyManager().esc)
+        	State.setState(handler.getGame().menuState);
 	}
 
 	@Override
 	public void render(Graphics g) {
-		  g.drawImage(Assets.back, 0, 0, null);
-		  map.render(g);
+		g.clearRect(0, 0, 600, 480); 
+		map.render(g);
 	}
 }
