@@ -1,6 +1,10 @@
 package states;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
 
 import Imageloader.Assets;
 import entities.Slender;
@@ -10,6 +14,7 @@ import map.Map;
 public class GameState extends State{
 	
 	private Map map;
+	
 	
 	public GameState(Handler handler) {
 		super(handler);

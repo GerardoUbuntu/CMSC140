@@ -17,7 +17,7 @@ public class Assets {
 	
 	public static void init(){
 		sheet = new SpriteSheet(ImageLoader.loadImage("/images/sprite.png"));
-		bg  = ImageLoader.loadImage("/images/menubg.gif");
+		bg  = ImageLoader.loadImage("/images/lalala.gif");
 		back = ImageLoader.loadImage("/images/Horizon.png");
 		rock = ImageLoader.loadImage("/images/rock.png");
 		grass = ImageLoader.loadImage("/images/grass.png");
