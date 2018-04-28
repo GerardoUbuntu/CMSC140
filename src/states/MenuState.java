@@ -8,7 +8,6 @@ import java.awt.Toolkit;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.net.BindException;
-
 import javax.swing.JOptionPane;
 
 import Imageloader.Assets;
@@ -21,6 +20,9 @@ import network.NetworkUtil;
 import network.Packet00Login;
 import network.Packet03GETID;
 import network.Server;
+
+import Imageloader.Assets;
+import main.Handler;
 import ui.ClickListener;
 import ui.ImageButton;
 import ui.UIManager;
@@ -30,8 +32,8 @@ public class MenuState extends State {
 	
 	private UIManager uiManager;
 	Image image;
-	public boolean isRunning;
 
+	public boolean isRunning;
 	
 	public MenuState(Handler handler) {
 		super(handler);
@@ -43,6 +45,7 @@ public class MenuState extends State {
 
 			@Override
 			public void onClick() {
+
 				handler.getGame().windowHandler = new WindowHandler(handler.getGame());
 				NetworkUtil networkUtil = new NetworkUtil();
 				
@@ -106,14 +109,17 @@ public class MenuState extends State {
 				State.setState(new WaitingState(handler));
 			}}));
 		
+		
+		
 		uiManager.addObject(new ImageButton(220,190 , 32,32, Assets.quit, new ClickListener(){
+
 
 			@Override
 			public void onClick() {
 				System.exit(0);
 			}}));
 		
-		
+
 	}
 
 	@Override

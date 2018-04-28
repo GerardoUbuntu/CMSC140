@@ -7,6 +7,7 @@ import main.Handler;
 
 public abstract class Entity {
     
+
 	public float x;
 	public float y;
 	protected int width, height;

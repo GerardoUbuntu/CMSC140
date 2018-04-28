@@ -25,8 +25,6 @@ public class GameState extends State{
 	@Override
 	public void update() {
 		handler.getMap().update();
-        if(handler.getKeyManager().esc)
-        	State.setState(handler.getGame().menuState);
 	}
 
 	@Override

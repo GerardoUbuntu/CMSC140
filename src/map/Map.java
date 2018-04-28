@@ -66,10 +66,12 @@ public class Map {
 		}
 	}
 	
+
 	public EntityManager getEntityManager() {
 		return this.entityManager;
 	}
 	
+
 	public int getHeight(){
 		return height;
 	}

@@ -10,8 +10,7 @@ public abstract class Creature extends Entity {
 	protected float speed;
 	public static final int DEFAULT_WIDTH = 32, DEFAULT_HEIGHT = 32;
     protected float xMove, yMove; 
-    
-	
+
 	public Creature(Handler handler,float x, float y,int width, int height) {
 		super(handler, x, y, width, height);
 		speed = DEFAULT_SPEED;

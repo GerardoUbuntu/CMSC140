@@ -56,6 +56,7 @@ public class EntityManager {
 		this.slender = slender;
 	}
 
+
 	public synchronized ArrayList<Entity> getEntities() {
 		return entities;
 	}
