@@ -1,15 +1,15 @@
 package network;
 
-public class Packet04START extends Packet {
+public class Packet05DEAD extends Packet {
 
-	public int id;
-	public Packet04START(byte[] data) {
-		super(04);
+	public long id;
+	public Packet05DEAD(byte[] data) {
+		super(05);
 		this.id = Integer.parseInt(readData(data));
 	}
 	
-	public Packet04START(int id) {
-		super(04);
+	public Packet05DEAD(long id) {
+		super(05);
 		this.id  = id;
 	}
 
@@ -25,7 +25,7 @@ public class Packet04START extends Packet {
 
 	@Override
 	public byte[] getData() {
-		return ("04"+this.id).getBytes();
+		return ("05"+this.id).getBytes();
 	}
 	
 

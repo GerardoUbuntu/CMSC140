@@ -27,9 +27,10 @@ public class EntityManager {
     
     public void render(Graphics g){
        for(Entity e : getEntities()){
-    	   e.render(g);
+    	   if(! e.equals(handler.getGame().player))
+    		   e.render(g);
        }
-//       slender.render(g);
+       handler.getGame().player.render(g);
     }
     
     public void addEntity(Entity e){
@@ -94,6 +95,25 @@ public class EntityManager {
 		 player.y = y;
 		 player.setMoving(isMoving);
 		 player.setMove(move);
+	}
+	
+	public void modifyPlayer(int id) {
+		 int index = getClientPlayerIndex(id);
+		 ClientPlayer player = (ClientPlayer) getEntities().get(index);
+		 player.makeSlender();
+
+	}
+	
+	public void setDead(int id) {
+		 int index = getClientPlayerIndex(id);
+		 ClientPlayer player = (ClientPlayer) getEntities().get(index);
+		 player.dead = 1;
+		 try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 	}
     
 }

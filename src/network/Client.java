@@ -61,8 +61,7 @@ public class Client extends Thread{
 		    	break;
 		    case LOGIN :
 		        packet = new Packet00Login(data);
-		    	handleLogin((Packet00Login)packet, address, port);
-		    	
+		    	handleLogin((Packet00Login)packet, address, port);		    	
 		    	break;
 		    case DISCONNECT :
 		    	packet = new Packet01Disconnect(data);
@@ -76,11 +75,34 @@ public class Client extends Thread{
 		    case GETID :
 		    	packet = new Packet03GETID(data);
 		    	game.player.id = ((Packet03GETID)packet).id;
+		    	game.player.x = ((Packet03GETID)packet).x;
+		    	game.player.y = ((Packet03GETID)packet).y;
+			
 		    	break;
 		    case START : 
 		    	GameState state = new GameState(game.getHandler());
+		    	packet = new Packet04START(data);
+		    	modifyPlayer(((Packet04START)packet).id);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    	game.getHandler().getGameCamera().centerOnEntity(game.player);
 		    	states.State.setState(state);
 		        break;
+		    case DEAD :
+		    	packet = new Packet05DEAD(data);
+		    	setDead((int)((Packet05DEAD)packet).id);
+			
+		    	break;
+		    case WIN :
+		    	packet = new Packet06WIN(data);
+		        game.winner = ((int)((Packet06WIN)packet).id);
+			
+		    	break;
+
 		    	
 		}
 		
@@ -105,5 +127,16 @@ public class Client extends Thread{
 		System.out.println("[" + address.getAddress() + ":" + port + "] " + packet.getUsername() + "has joined the game...");
     	ClientPlayer client = new ClientPlayer(game.getHandler(),packet.getX(), packet.getY(), 50, 50, packet.getUsername(), address, port, packet.getId());
         game.getHandler().getMap().getEntityManager().addEntity(client);
+       
 	}
+	
+	private void modifyPlayer(int id) {
+		game.getHandler().getMap().getEntityManager().modifyPlayer(id);
+	}
+	
+	private void setDead(int id) {
+		System.out.println("Dead " + id);
+		game.getHandler().getMap().getEntityManager().setDead(id);
+	}
+	
 }

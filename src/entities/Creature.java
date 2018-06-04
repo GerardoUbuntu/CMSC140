@@ -19,8 +19,10 @@ public abstract class Creature extends Entity {
 	}
 
     public void move(){
-       moveX();
-       moveY();
+       if(!checkEntityCollisions(xMove, 0f))
+    	   moveX();
+       if(!checkEntityCollisions(0f, yMove))
+    	   moveY();
     }
     
     public void moveX(){
@@ -62,7 +64,7 @@ public abstract class Creature extends Entity {
 				int ty = (int) (y + yMove + bounds.y + bounds.height) / Tile.TILE_HEIGHT;
 				
 				if(!collisionWithTile((int) (x + bounds.x) / Tile.TILE_WIDTH, ty) &&
-						!collisionWithTile((int) (x + bounds.x + bounds.width) / Tile.TILE_WIDTH, ty)){
+						!collisionWithTile((int) (x + bounds.x + bounds.width) / Tile.TILE_WIDTH, ty) && !((this.y + yMove) > 576)){
 					y += yMove;
 				}else{
 					y = ty * Tile.TILE_HEIGHT - bounds.y - bounds.height - 1;

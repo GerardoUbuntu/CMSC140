@@ -1,6 +1,7 @@
 package network;
 
 
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -9,6 +10,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 
@@ -20,11 +22,12 @@ public class Server extends Thread{
 	
 	private DatagramSocket socket;
 	private Game game;
-	
+	public int humans = 0;
 	private List<ClientPlayer> connectedPlayers = new ArrayList<ClientPlayer>();
 	public long id = 0L;
-	
+	private List<Rectangle> rectangles ;
 	public Server(Game game) {
+		rectangles = new ArrayList<Rectangle>();
 		this.game = game;
 		try {
 			this.socket = new DatagramSocket(1131);
@@ -77,8 +80,18 @@ public class Server extends Thread{
 		    	this.handleMove(((Packet02Move)packet));
 		    	break;
 		    case GETID:
-		    	packet = new Packet03GETID(getId());
+		    	Rectangle coord = getCoord();
+		    	packet = new Packet03GETID(getId(),coord.x, coord.y);	    	
 		    	sendData(packet.getData(), address, port);
+		    	break;
+		    case DEAD:
+		    	packet = new Packet05DEAD(data);
+		    	humans -= 1;
+		    	if(humans== 0) {
+		    		Packet06WIN win = new Packet06WIN(2);
+		    		win.writeData(this);
+		    	}
+		    	packet.writeData(this);
 		    	break;
 		    	
 		    	
@@ -118,8 +131,7 @@ public class Server extends Thread{
 		System.out.println(client.port);
 		System.out.println("size" + this.connectedPlayers.size());
 		for(ClientPlayer c : this.connectedPlayers) {
-			
-			
+					
 			if(c.id == client.id ) {
 				System.out.println("Username: " +  c.getUsername());
 				System.out.println("Client Username: " +  client.getUsername());
@@ -139,6 +151,7 @@ public class Server extends Thread{
 				
 				Packet00Login packet1 = new Packet00Login(c.getUsername(), c.x, c.y, c.id);
 				sendData(packet1.getData(), client.ipAddress, client.port);
+				System.out.println(c);
 			}
 		}
 		if(!alreadyConnected) {
@@ -181,5 +194,24 @@ public class Server extends Thread{
 	
 	public DatagramSocket getSocket() {
 	    return this.socket;  	
+	}
+	
+	public Rectangle getCoord() {
+		Random rand = new Random(); 
+		int x, y;
+		while(true) {
+			x = rand.nextInt(1580); 
+		    y = rand.nextInt(570);
+		    if(!(game.getHandler().getMap().getTile(x, y).isSolid()) && !(rectangles.contains(new Rectangle(x, y, 32,32))))
+		    	break;
+		}   
+		rectangles.add(new Rectangle(x, y, 32,32));
+		return new Rectangle(x, y, 32,32);
+	}
+	
+	public int SlenderId() {
+		Random rand = new Random(); 
+		humans = connectedPlayers.size() - 1;
+		return rand.nextInt(connectedPlayers.size()); 
 	}
 }

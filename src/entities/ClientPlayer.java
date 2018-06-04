@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.net.InetAddress;
 
@@ -32,6 +33,7 @@ public class ClientPlayer extends Creature {
 	
 	private boolean isMoving;
     public long id;
+    public int type = 0, dead=0;
 	
 	public ClientPlayer(Handler handler, KeyManager keymanager,  float x, float y, int width, int height, String username, InetAddress ipAddress, int port, long id) {
 		super(handler, x, y, Creature.DEFAULT_WIDTH, Creature.DEFAULT_HEIGHT);
@@ -41,15 +43,16 @@ public class ClientPlayer extends Creature {
 		this.username = username;
 		this.keymanager = keymanager;
 		this.id = id;
-		bounds.x = 4;
-		bounds.y = 5;
-		bounds.width = 25;
-		bounds.height = 27;
+		bounds.x = 10;
+		bounds.y = 15;
+		bounds.width = 15;
+		bounds.height = 15;
+		handler.getGameCamera().centerOnEntity(this);
 		
-		down = new Animation(100, Assets.slender_down);
-		up = new Animation(100, Assets.slender_up);
-		left = new Animation(100, Assets.slender_left);
-		right = new Animation(100, Assets.slender_right);
+		down = new Animation(100, Assets.human_down);
+		up = new Animation(100, Assets.human_up);
+		left = new Animation(100, Assets.human_left);
+		right = new Animation(100, Assets.human_right);
 	}
 	
 	public ClientPlayer(Handler handler ,float x, float y, int width, int height, String username, InetAddress ipAddress, int port, long id) {
@@ -59,15 +62,15 @@ public class ClientPlayer extends Creature {
 		this.port = port;
 		this.handler = handler;
 		this.id = id;
-		bounds.x = 4;
-		bounds.y = 5;
-		bounds.width = 25;
-		bounds.height = 27;
+		bounds.x = 10;
+		bounds.y = 15;
+		bounds.width = 15;
+		bounds.height = 13;
 		
-		down = new Animation(100, Assets.slender_down);
-		up = new Animation(100, Assets.slender_up);
-		left = new Animation(100, Assets.slender_left);
-		right = new Animation(100, Assets.slender_right);
+		down = new Animation(100, Assets.human_down);
+		up = new Animation(100, Assets.human_up);
+		left = new Animation(100, Assets.human_left);
+		right = new Animation(100, Assets.human_right);
 	}
 
 	@Override
@@ -115,33 +118,45 @@ public class ClientPlayer extends Creature {
 	@Override
 	public void render(Graphics g) {
 		 Graphics2D g2d = (Graphics2D) g;
-//		  Area a = new Area(new Recdtangle(0, 0, 480, 256));
-		 // a.subtract(new Area(new Ellipse2D.Double((int)(x - handler.getGameCamera().getxOffset())-16,  (int) (y - handler.getGameCamera().getyOffset())-16, 100, 100)));
+		  Area a = new Area(new Rectangle(0, 0, 480, 256));
+		  a.subtract(new Area(new Ellipse2D.Double((int)(x - handler.getGameCamera().getxOffset())-31,  (int) (y - handler.getGameCamera().getyOffset())-30, 100, 100)));
 		  
-	      int xPoly[] = new int[3];
-	      int yPoly[]= new int[3];
-	      if(move == 0){
-	    	  xPoly = new int[]{(int)(x - handler.getGameCamera().getxOffset()) -84,(int)(x - handler.getGameCamera().getxOffset()) + 16,(int)(x - handler.getGameCamera().getxOffset()) + 116};
-	    	  yPoly = new int[]{(int) (y - handler.getGameCamera().getyOffset()) +116,(int) (y - handler.getGameCamera().getyOffset()) + 16, (int) (y - handler.getGameCamera().getyOffset()) + 116};
-	      }else if(move == 1){
-	    	  xPoly = new int[]{(int)(x - handler.getGameCamera().getxOffset()) -84,(int)(x - handler.getGameCamera().getxOffset()) + 16,(int)(x - handler.getGameCamera().getxOffset()) + 116};
-	    	  yPoly = new int[]{(int) (y - handler.getGameCamera().getyOffset()) -84,(int) (y - handler.getGameCamera().getyOffset()) + 16, (int) (y - handler.getGameCamera().getyOffset()) - 84};
-	      }else if(move == 2){
-	    	  xPoly = new int[]{(int)(x - handler.getGameCamera().getxOffset()) +116,(int)(x - handler.getGameCamera().getxOffset()) + 16,(int)(x - handler.getGameCamera().getxOffset()) + 116};
-	    	  yPoly = new int[]{(int) (y - handler.getGameCamera().getyOffset()) -84,(int) (y - handler.getGameCamera().getyOffset()) + 16, (int) (y - handler.getGameCamera().getyOffset()) + 116};
-	      }else if(move == 3){
-	    	  xPoly = new int[]{(int)(x - handler.getGameCamera().getxOffset()) -84,(int)(x - handler.getGameCamera().getxOffset()) + 16,(int)(x - handler.getGameCamera().getxOffset()) - 84};
-	    	  yPoly = new int[]{(int) (y - handler.getGameCamera().getyOffset()) -84,(int) (y - handler.getGameCamera().getyOffset()) + 16, (int) (y - handler.getGameCamera().getyOffset()) + 116};
-	      }
+//	      int xPoly[] = new int[3];
+//	      int yPoly[]= new int[3];
+//	      if(move == 0){
+//	    	  xPoly = new int[]{(int)(x - handler.getGameCamera().getxOffset()) -84,(int)(x - handler.getGameCamera().getxOffset()) + 16,(int)(x - handler.getGameCamera().getxOffset()) + 116};
+//	    	  yPoly = new int[]{(int) (y - handler.getGameCamera().getyOffset()) +116,(int) (y - handler.getGameCamera().getyOffset()) + 16, (int) (y - handler.getGameCamera().getyOffset()) + 116};
+//	      }else if(move == 1){
+//	    	  xPoly = new int[]{(int)(x - handler.getGameCamera().getxOffset()) -84,(int)(x - handler.getGameCamera().getxOffset()) + 16,(int)(x - handler.getGameCamera().getxOffset()) + 116};
+//	    	  yPoly = new int[]{(int) (y - handler.getGameCamera().getyOffset()) -84,(int) (y - handler.getGameCamera().getyOffset()) + 16, (int) (y - handler.getGameCamera().getyOffset()) - 84};
+//	      }else if(move == 2){
+//	    	  xPoly = new int[]{(int)(x - handler.getGameCamera().getxOffset()) +116,(int)(x - handler.getGameCamera().getxOffset()) + 16,(int)(x - handler.getGameCamera().getxOffset()) + 116};
+//	    	  yPoly = new int[]{(int) (y - handler.getGameCamera().getyOffset()) -84,(int) (y - handler.getGameCamera().getyOffset()) + 16, (int) (y - handler.getGameCamera().getyOffset()) + 116};
+//	      }else if(move == 3){
+//	    	  xPoly = new int[]{(int)(x - handler.getGameCamera().getxOffset()) -84,(int)(x - handler.getGameCamera().getxOffset()) + 16,(int)(x - handler.getGameCamera().getxOffset()) - 84};
+//	    	  yPoly = new int[]{(int) (y - handler.getGameCamera().getyOffset()) -84,(int) (y - handler.getGameCamera().getyOffset()) + 16, (int) (y - handler.getGameCamera().getyOffset()) + 116};
+//	      }
 //		  a.subtract(new Area(new Polygon(xPoly,yPoly, 3)));
-//		  g2d.setColor(Color.BLACK);
-//		  g2d.fill(a);
-	          
-          g.setFont(new Font("default", Font.BOLD, 16));
-          g.drawString(this.username, (int)(x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()) - 5);
-    	  g.drawImage(getCurrentAnimationFrame(), (int)(x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height,null);
-	    	  //g.setColor(Color.RED);
-          //g.fillRect((int)(x + bounds.x - handler.getGameCamera().getxOffset()), (int)(y + bounds.y - handler.getGameCamera().getyOffset()), bounds.width, bounds.height);
+		  if(keymanager!=null && type != 1 && dead == 0) {
+			  g2d.setColor(Color.BLACK);
+			  g2d.fill(a);
+		  }
+		  if(handler.getGame().winner == 2) {
+			  g.setColor(Color.RED);
+			  g.setFont(new Font("default", Font.BOLD,32));
+          	  g.drawString("SlenderMan Wins", 130, 32);
+		  }
+		  if(dead == 0) {
+			  g.setFont(new Font("default", Font.BOLD, 16));
+          	  g.drawString(this.username, (int)(x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()) - 5);
+    		  g.drawImage(getCurrentAnimationFrame(), (int)(x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height,null);
+		  }else if(dead == 1 && keymanager != null) {
+			  g.setColor(Color.RED);
+			  g.setFont(new Font("default", Font.BOLD,32));
+          	  g.drawString("You're Dead", 180, 100);
+		  }
+    		  g.setColor(Color.RED);
+          g.fillRect((int)(x + bounds.x - handler.getGameCamera().getxOffset()), (int)(y + bounds.y - handler.getGameCamera().getyOffset()), bounds.width, bounds.height);
 	}
 	
 	 private BufferedImage getCurrentAnimationFrame(){
@@ -159,6 +174,14 @@ public class ClientPlayer extends Creature {
 		    return movingDir;
 		}
 
+	public void makeSlender() {
+		type = 1;
+		down = new Animation(100, Assets.slender_down);
+		up = new Animation(100, Assets.slender_up);
+		left = new Animation(100, Assets.slender_left);
+		right = new Animation(100, Assets.slender_right);
+	}
+	
 	public String getUsername() {
 		return this.username;
 	}

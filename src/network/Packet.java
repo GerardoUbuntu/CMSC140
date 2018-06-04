@@ -3,7 +3,7 @@ package network;
 public abstract class Packet {
  
 	public static enum PacketTypes  {
-		INVALID(-1), LOGIN(00), DISCONNECT(01), MOVE(02), GETID(03), START(04);
+		INVALID(-1), LOGIN(00), DISCONNECT(01), MOVE(02), GETID(03), START(04), DEAD(05), WIN(06);
 		
 		private int packetId;
 		private PacketTypes(int packetId) {
