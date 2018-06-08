@@ -40,7 +40,7 @@ public class Game implements Runnable {
 	private Handler handler;
 	
 	public Client socketClient;
-	public Server socketServer;
+	public Server socketServer = null;
     public int winner = 0; 
 	public ClientPlayer player;
 	public Game(String title, int width, int height) {
@@ -200,7 +200,10 @@ public class Game implements Runnable {
 	}
 
 	public Server getServer() {
-		return this.socketServer;
+		if(this.socketServer != null)
+			return this.socketServer;
+		else 
+			return null;
 	}
 
 	public void setWindow(GameWindow window) {

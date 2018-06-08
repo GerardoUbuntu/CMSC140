@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 
 public class Assets {
 	
-	public static BufferedImage back,rock,grass, bg, title;
+	public static BufferedImage back,rock,grass, bg, title, s, l,e, n, d, r, m, a;
 	public static BufferedImage[] slender_down;
 	public static BufferedImage[] slender_up;
 	public static BufferedImage[] slender_right;
@@ -41,6 +41,16 @@ public class Assets {
 		join[1] = ImageLoader.loadImage("/images/Photos/join1.png");
 		quit[0] = ImageLoader.loadImage("/images/Photos/Quit.png");
 		quit[1] = ImageLoader.loadImage("/images/Photos/Quit1.png");
+		
+		s = ImageLoader.loadImage("/images/Photos/s.png");
+		l = ImageLoader.loadImage("/images/Photos/l.png");
+		e = ImageLoader.loadImage("/images/Photos/e.png");
+		n = ImageLoader.loadImage("/images/Photos/n.png");
+		d = ImageLoader.loadImage("/images/Photos/d.png");
+		r = ImageLoader.loadImage("/images/Photos/r.png");
+		m = ImageLoader.loadImage("/images/Photos/m.png");
+		a = ImageLoader.loadImage("/images/Photos/a.png");
+		
 		slender_down = new BufferedImage[9]; 
 		slender_up = new BufferedImage[9];
 		slender_right = new BufferedImage[9];

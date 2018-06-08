@@ -17,15 +17,18 @@ import javax.swing.JOptionPane;
 import entities.ClientPlayer;
 import main.Game;
 import network.Packet.PacketTypes;
+import tile.Tile;
 
 public class Server extends Thread{
 	
 	private DatagramSocket socket;
 	private Game game;
-	public int humans = 0;
+	public int humans = 0, letters;
 	private List<ClientPlayer> connectedPlayers = new ArrayList<ClientPlayer>();
 	public long id = 0L;
 	private List<Rectangle> rectangles ;
+	public long letterId = 0L;
+	public static String slender= "slenderman";
 	public Server(Game game) {
 		rectangles = new ArrayList<Rectangle>();
 		this.game = game;
@@ -93,7 +96,24 @@ public class Server extends Thread{
 		    	}
 		    	packet.writeData(this);
 		    	break;
-		    	
+		    case Letter:
+		    	letters = slender.length();
+		    	for(int i=0; i<slender.length(); i++) {
+		    		Rectangle coord1 = getCoord();
+		    		Packet07Letter letter = new Packet07Letter(coord1.x, coord1.y , (int)(getLetterId()), ""+slender.charAt(i));
+		    		System.out.println("add" + letter.id);
+		    		letter.writeData(this);
+		    	}
+		    	break;
+		    case PICK:	
+	    		Packet10PICK pick = new Packet10PICK(data);
+	    		pick.writeData(this);
+	    		letters -=1 ;
+	    		if(letters == 0) {
+		    		Packet06WIN win = new Packet06WIN(1);
+		    		win.writeData(this);
+		    	}
+		    	break;
 		    	
 		}
 		
@@ -192,6 +212,10 @@ public class Server extends Thread{
 		return id++;
 	}
 	
+	public long getLetterId() {
+		return letterId++;
+	}
+	
 	public DatagramSocket getSocket() {
 	    return this.socket;  	
 	}
@@ -202,7 +226,7 @@ public class Server extends Thread{
 		while(true) {
 			x = rand.nextInt(1580); 
 		    y = rand.nextInt(570);
-		    if(!(game.getHandler().getMap().getTile(x, y).isSolid()) && !(rectangles.contains(new Rectangle(x, y, 32,32))))
+		    if(!(game.getHandler().getMap().getTile((x+32)/Tile.TILE_WIDTH, (y+32)/Tile.TILE_HEIGHT).isSolid()) && !(rectangles.contains(new Rectangle(x, y, 32,32))))
 		    	break;
 		}   
 		rectangles.add(new Rectangle(x, y, 32,32));

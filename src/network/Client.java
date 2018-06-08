@@ -1,5 +1,6 @@
 package network;
 
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -8,6 +9,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import entities.ClientPlayer;
+import entities.Letter;
 import main.Game;
 import network.Packet.PacketTypes;
 import states.GameState;
@@ -102,7 +104,25 @@ public class Client extends Thread{
 		        game.winner = ((int)((Packet06WIN)packet).id);
 			
 		    	break;
-
+		    case Letter:	
+		    	Packet07Letter letter = new Packet07Letter(data);
+		    	System.out.println("received" + letter.id);
+		    	game.getHandler().getMap().getEntityManager().addLetter(new Letter(game.getHandler(), (float)(letter.x), (float)(letter.y), (int)(letter.id), letter.letter));
+		        System.out.println("Letter Added");
+		    	break;
+		    case PICK:	
+	    		Packet10PICK pick = new Packet10PICK(data);
+	    		System.out.println("add pick" + pick.letterId);
+	    		game.getHandler().getMap().getEntityManager().setInvisible(pick.letterId);;
+	    		System.out.println("Letter Removed" + pick.letterId);
+//			try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+		    	break;
+		    	
 		    	
 		}
 		

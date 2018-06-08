@@ -10,11 +10,13 @@ public class EntityManager {
 	private Handler handler;
 	private Slender slender;
     private ArrayList<Entity> entities;	
+    private ArrayList<Letter> letters;
 	
     public EntityManager(Handler handler, Slender slender){
 		this.slender = slender;
 		this.handler = handler;
 		entities = new ArrayList<Entity>();
+		letters = new ArrayList<Letter>();
 	}
     
     public void update(){
@@ -22,10 +24,18 @@ public class EntityManager {
     		Entity e = entities.get(i);
     		e.update();
     	}
+    	
+    	for(int i =0; i<letters.size(); i++){
+    		Entity e = letters.get(i);
+    		e.update();
+    	}
 //    	slender.update();
     }
     
     public void render(Graphics g){
+	   for(Letter e : getLetters()){
+    	 e.render(g);
+       }
        for(Entity e : getEntities()){
     	   if(! e.equals(handler.getGame().player))
     		   e.render(g);
@@ -39,6 +49,14 @@ public class EntityManager {
     
     public void removeEntity(Entity e){
     	entities.remove(e);
+    }
+    
+    public void addLetter(Letter e){
+    	letters.add(e);
+    }
+    
+    public void removeLetter(Letter e){
+    	letters.remove(e);
     }
 
 	public Handler getHandler() {
@@ -61,6 +79,11 @@ public class EntityManager {
 	public synchronized ArrayList<Entity> getEntities() {
 		return entities;
 	}
+	
+	public synchronized ArrayList<Letter> getLetters() {
+		return letters;
+	}
+
 
 	public void setEntities(ArrayList<Entity> entities) {
 		this.entities = entities;
@@ -76,6 +99,18 @@ public class EntityManager {
 		}
 		this.entities.remove(index);
 	}
+	
+	public void removeLetter(long id) {
+		int index = 0;
+		for(Letter e: getLetters()) {
+			if( e instanceof Letter && e.id == id) {
+				break;
+			}
+			index++; 
+		}
+		this.letters.remove(index);
+	}
+	
 	
 	public int getClientPlayerIndex(long id) {
 		int index = 0;
@@ -114,6 +149,18 @@ public class EntityManager {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void setInvisible(int id) {
+		int index = 0;
+		for(Letter e: getLetters()) {
+			if( e instanceof Letter && e.id == id) {
+				break;
+			}
+			index++; 
+		}
+		System.out.println(this.letters.get(index).letter);
+		this.letters.get(index).visible = 0;
 	}
     
 }

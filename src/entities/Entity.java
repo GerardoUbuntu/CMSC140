@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 
 import main.Handler;
 import network.Packet05DEAD;
+import network.Packet10PICK;
 
 public abstract class Entity {
     
@@ -66,10 +67,31 @@ public abstract class Entity {
 					dead.writeData(handler.getGame().socketClient);
 					System.out.println("Yeah yeah yeah "  + ((ClientPlayer)e).id );
 				}
+				
+				else if(((ClientPlayer)this).type == 0 && ((ClientPlayer)e).type == 1 ) {
+					Packet05DEAD dead = new Packet05DEAD(((ClientPlayer)this).id);
+					dead.writeData(handler.getGame().socketClient);
+					System.out.println("Yeah yeah yeah "  + ((ClientPlayer)this).id );
+				}
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	public void checkLetterCollision(float xOffset, float yOffset) {
+		for(Letter e : handler.getMap().getEntityManager().getLetters()) {
+			System.out.println("every" + e.id);
+			if(e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset)) && ((ClientPlayer)this).dead == 0 && e.visible ==1){
+				if(((ClientPlayer)this).type == 0) {
+					System.out.println("Sample"+e.id);
+					Packet10PICK pick = new Packet10PICK(e.id, (int)((ClientPlayer)this).id);
+					pick.writeData(handler.getGame().socketClient);
+					System.out.println("Yeah1 yeah1 yeah1 "  + ((ClientPlayer)this).id );
+				}
+				
+			}
+		}
 	}
     public Rectangle getCollisionBounds(float xOffset, float yOffset) { 
     	return new Rectangle((int)(x + bounds.x + xOffset),(int)(y + bounds.y + yOffset), bounds.width , bounds.height);

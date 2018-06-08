@@ -17,6 +17,7 @@ import network.NetworkUtil;
 import network.Packet00Login;
 import network.Packet03GETID;
 import network.Packet04START;
+import network.Packet07Letter;
 import network.Server;
 import ui.ClickListener;
 import ui.ImageButton;
@@ -36,6 +37,13 @@ public class WaitingState extends State {
 	
 				@Override
 				public void onClick() {
+					Packet07Letter letter = new Packet07Letter(-1, -1, -1, "");
+					letter.writeData(handler.getGame().socketClient);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 					Packet04START start = new Packet04START(handler.getGame().getServer().SlenderId());
 					start.writeData(handler.getGame().getServer());
 					try {

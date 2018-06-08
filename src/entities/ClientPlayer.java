@@ -33,7 +33,7 @@ public class ClientPlayer extends Creature {
 	
 	private boolean isMoving;
     public long id;
-    public int type = 0, dead=0;
+    public int type = 0, dead=0, pause =0;
 	
 	public ClientPlayer(Handler handler, KeyManager keymanager,  float x, float y, int width, int height, String username, InetAddress ipAddress, int port, long id) {
 		super(handler, x, y, Creature.DEFAULT_WIDTH, Creature.DEFAULT_HEIGHT);
@@ -83,7 +83,7 @@ public class ClientPlayer extends Creature {
 	}
 	
 	public void getInput(){
-		if(keymanager!=null) {
+		if(keymanager!=null && pause == 0) {
 			xMove = 0;
 			yMove = 0;
 			if(keymanager.up){
@@ -145,6 +145,12 @@ public class ClientPlayer extends Creature {
 			  g.setColor(Color.RED);
 			  g.setFont(new Font("default", Font.BOLD,32));
           	  g.drawString("SlenderMan Wins", 130, 32);
+          	  pause = 1;
+		  }else if(handler.getGame().winner == 1) {
+			  g.setColor(Color.BLUE);
+			  g.setFont(new Font("default", Font.BOLD,32));
+          	  g.drawString("Humans Wins", 130, 32);
+          	  pause = 1;
 		  }
 		  if(dead == 0) {
 			  g.setFont(new Font("default", Font.BOLD, 16));

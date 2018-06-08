@@ -8,6 +8,8 @@ import java.awt.Toolkit;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.net.BindException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -66,8 +68,11 @@ public class MenuState extends State {
 					handler.getGame().socketClient.start();
 					Map map = new Map(handler,"res/map/map1.txt");
 					handler.setMap(map);
+					String name = "No Name";
+					String input = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter a user name: ");
+					name = input == null ? name : input;
 					handler.getGame().player = new ClientPlayer(handler, handler.getKeyManager(),100, 100, 50, 50, 
-							JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter a user name: "), null, -1, -1);
+							name, null, -1, -1);
 					Packet03GETID getId = new Packet03GETID(-1, -1, -1);
 					getId.writeData(handler.getGame().getSocketClient());
 					try {
@@ -94,32 +99,46 @@ public class MenuState extends State {
 
 			@Override
 			public void onClick() {
-				handler.getGame().socketClient = new Client(handler.getGame(), JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter remote IP address: "));
-				handler.getGame().socketClient.start();
-				handler.getGame().windowHandler = new WindowHandler(handler.getGame());
-				Map map = new Map(handler,"res/map/map1.txt");
+				Pattern ptn = Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$");
+				String ip = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter remote IP address: ");
+				Matcher mtch = ptn.matcher(ip);
+//				while(! mtch.find() ) {
+//					JOptionPane.showMessageDialog(handler.getGame().getWindow().getFrame(), "Input Valid Ip Address" , "", JOptionPane.WARNING_MESSAGE);
+//					String ip = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter remote IP address: ");
+//					
+//				}
+				if(mtch.find()) {
+					handler.getGame().socketClient = new Client(handler.getGame(),ip);
+					handler.getGame().socketClient.start();
+					handler.getGame().windowHandler = new WindowHandler(handler.getGame());
+					Map map = new Map(handler,"res/map/map1.txt");
+					String name = "No Name";
+					String input = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter a user name: ");
+					name = input == null ? name : input;
+					handler.getGame().player = new ClientPlayer(handler, handler.getKeyManager(),100, 100, 50, 50, 
+							name, null, -1, -1);
+					handler.setMap(map);
+					Packet03GETID getId = new Packet03GETID(-1, -1, -1);
+					getId.writeData(handler.getGame().getSocketClient());
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ClientPlayer player = handler.getGame().player;
+					Packet00Login loginPacket  = new Packet00Login(player.getUsername(), player.x, player.y, player.id);
+					System.out.println("Player Id " + handler.getGame().player.id);
+					if(handler.getGame().getServer() != null) {
+						handler.getGame().getServer().addConnection(player, loginPacket, player.ipAddress, player.port);
+					}
+					loginPacket.writeData(handler.getGame().getSocketClient());
 				
-				handler.getGame().player = new ClientPlayer(handler, handler.getKeyManager(),100, 100, 50, 50, 
-						JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter a user name: "), null, -1, -1);
-				handler.setMap(map);
-				Packet03GETID getId = new Packet03GETID(-1, -1, -1);
-				getId.writeData(handler.getGame().getSocketClient());
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					handler.getMap().getEntityManager().addEntity(player);
+					State.setState(new WaitingState(handler));
+				}else {
+					JOptionPane.showMessageDialog(handler.getGame().getWindow().getFrame(), "Input Valid Ip Address" , "", JOptionPane.WARNING_MESSAGE);
 				}
-				ClientPlayer player = handler.getGame().player;
-				Packet00Login loginPacket  = new Packet00Login(player.getUsername(), player.x, player.y, player.id);
-				System.out.println("Player Id " + handler.getGame().player.id);
-				if(handler.getGame().getServer() != null) {
-					handler.getGame().getServer().addConnection(player, loginPacket, player.ipAddress, player.port);
-				}
-				loginPacket.writeData(handler.getGame().getSocketClient());
-			
-				handler.getMap().getEntityManager().addEntity(player);
-				State.setState(new WaitingState(handler));
 			}}));
 		
 		
