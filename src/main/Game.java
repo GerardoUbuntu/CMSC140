@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JOptionPane;
@@ -34,7 +35,7 @@ public class Game implements Runnable {
 	private KeyManager keyManager;
 	private MouseManager mouseManager;
 	public WindowHandler windowHandler;
-	
+	private Image image;
 	//
 	private GameCamera gameCamera;
 	private Handler handler;
@@ -153,7 +154,7 @@ public class Game implements Runnable {
 			  return;
 		  }
 		  g = bs.getDrawGraphics();
-		  
+		
 		  if(State.getState() != null)
 			State.getState().render(g);
 
@@ -208,6 +209,14 @@ public class Game implements Runnable {
 
 	public void setWindow(GameWindow window) {
 		this.window = window;
+	}
+	
+	public void setBackground(Image image) {
+		System.out.println("Image");
+		if(g!= null) {
+			g.drawImage(image, 20, 20, window.getCanvas());
+		}
+			
 	}
 
 }

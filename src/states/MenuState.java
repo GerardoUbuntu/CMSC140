@@ -7,7 +7,10 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferStrategy;
 import java.net.BindException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,7 +40,7 @@ public class MenuState extends State {
 	
 	private UIManager uiManager;
 	Image image;
-
+    public boolean  displayed=false;
 	public boolean isRunning;
 	
 	public MenuState(Handler handler) {
@@ -45,7 +48,14 @@ public class MenuState extends State {
 		uiManager  = new UIManager(handler);
 		handler.getMouseManager().setUIManager(uiManager);
 	    
-		image = Toolkit.getDefaultToolkit().createImage("/images/menubg.gif");
+	    URL url = null;
+		try {
+			url = new URL("http://i.stack.imgur.com/iQFxo.gif");
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        image = new ImageIcon(getClass().getResource("/images/menubg.gif")).getImage();
 		uiManager.addObject(new ImageButton(220,130 , 32,32, Assets.create, new ClickListener(){
 
 			@Override
@@ -157,9 +167,10 @@ public class MenuState extends State {
 	@Override
 	public void render(Graphics g) {
 		g.clearRect(0, 0, 480, 256);
-		g.drawImage(Assets.bg, 0, 0, 480, 256, null);
+//		g.drawImage(image, 0, 0, 480, 256, null);
 		g.drawImage(Assets.title, 100, 50, null);
 		uiManager.render(g);
+		displayed = true;
 	}
 
 	@Override

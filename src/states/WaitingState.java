@@ -68,8 +68,7 @@ public class WaitingState extends State {
 
 	@Override
 	public void render(Graphics g) {
-		g.clearRect(0, 0, 600, 480); 
-		g.drawImage(Assets.bg, 0, 0, 480, 256, null);
+//		g.drawImage(Assets.bg, 0, 0, 480, 256, null);
 		g.setFont(new Font("default", Font.BOLD, 16));
 		g.setColor(Color.BLACK);
 	    g.drawString("LOBBY", 210, 20);
