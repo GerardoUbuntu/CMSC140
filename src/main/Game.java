@@ -28,6 +28,7 @@ public class Game implements Runnable {
 	private boolean running = false;
 	private BufferStrategy bs;
 	private Graphics g;
+	public boolean serverRunning = false;
 	//states
 	public State gameState;
 	public State menuState;
@@ -142,7 +143,7 @@ public class Game implements Runnable {
 		keyManager.tick();
 		if(State.getState() != null)
 			State.getState().update();
-		if(State.getState() != menuState)
+		if(!(State.getState() instanceof MenuState))
 			socketClient.sendData("ping".getBytes());
 	}
     
@@ -154,7 +155,7 @@ public class Game implements Runnable {
 			  return;
 		  }
 		  g = bs.getDrawGraphics();
-		
+		 
 		  if(State.getState() != null)
 			State.getState().render(g);
 

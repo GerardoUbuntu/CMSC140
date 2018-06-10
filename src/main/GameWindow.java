@@ -10,7 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import states.ImagePanel;
 
 public class GameWindow {
 	
@@ -37,10 +36,10 @@ public class GameWindow {
 		canvas.setMaximumSize(new Dimension(width, height));
 		canvas.setMinimumSize(new Dimension(width, height));
 		canvas.setFocusable(false);
-		ImagePanel imagePanel = new ImagePanel( new ImageIcon(getClass().getResource("/images/menubg.gif")).getImage());
-		imagePanel.setBounds(0,0, width, height);
+//		ImagePanel imagePanel = new ImagePanel( new ImageIcon(getClass().getResource("/images/menubg.gif")).getImage());
+//		imagePanel.setBounds(0,0, width, height);
 		canvas.setBounds(0,0, width, height);
-		layeredPane.add(imagePanel, 1);
+//		layeredPane.add(imagePanel, 1);
 		layeredPane.add(canvas, 0);
 		frame.add(layeredPane);
 	

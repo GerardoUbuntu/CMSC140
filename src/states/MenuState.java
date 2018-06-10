@@ -66,43 +66,51 @@ public class MenuState extends State {
 				
 				System.out.println(networkUtil.getCurrentEnvironmentNetworkIp());
 				
-				handler.getGame().socketServer = new Server(handler.getGame());
-				if(handler.getGame().socketServer.getSocket() != null)
-					isRunning = true;
-				else 
-					isRunning = false;
-				System.out.println(isRunning);
-				if(isRunning) {
+				
+					if(handler.getGame().socketServer != null)
+						isRunning = true;
+					else {
+						isRunning = false;
+						handler.getGame().socketServer = new Server(handler.getGame());
+					}
+				System.out.println("running" +isRunning);
+				
+			if(handler.getGame().serverRunning )	{
+				if(!isRunning)
 					handler.getGame().socketServer.start();
-					handler.getGame().socketClient = new Client(handler.getGame(), networkUtil.getCurrentEnvironmentNetworkIp());
-					handler.getGame().socketClient.start();
-					Map map = new Map(handler,"res/map/map1.txt");
-					handler.setMap(map);
-					String name = "No Name";
-					String input = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter a user name: ");
-					name = input == null ? name : input;
-					handler.getGame().player = new ClientPlayer(handler, handler.getKeyManager(),100, 100, 50, 50, 
-							name, null, -1, -1);
-					Packet03GETID getId = new Packet03GETID(-1, -1, -1);
-					getId.writeData(handler.getGame().getSocketClient());
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					ClientPlayer player = handler.getGame().player;
-					handler.getMap().getEntityManager().addEntity(player);
-					Packet00Login loginPacket  = new Packet00Login(player.getUsername(), player.x, player.y, player.id);
-					System.out.println("player" + player.id);
-					
-					if(handler.getGame().getServer() != null) {
-						handler.getGame().getServer().addConnection(player, loginPacket, player.ipAddress, player.port);
-					}
-					loginPacket.writeData(handler.getGame().getSocketClient());
-					System.out.println("Player Id " + handler.getGame().player.id);
-					State.setState(new WaitingState(handler));
+				handler.getGame().socketClient = new Client(handler.getGame(), networkUtil.getCurrentEnvironmentNetworkIp());
+				handler.getGame().socketClient.start();
+				Map map = new Map(handler,"res/map/map1.txt");
+				handler.setMap(map);
+				String name = "Player Name";
+				String input = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter a user name: ");
+				name = input == null ? name : input;
+				handler.getGame().player = new ClientPlayer(handler, handler.getKeyManager(),100, 100, 50, 50, 
+						name, null, -1, -1);
+				Packet03GETID getId = new Packet03GETID(-1, -1, -1);
+				getId.writeData(handler.getGame().getSocketClient());
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+				ClientPlayer player = handler.getGame().player;
+				handler.getMap().getEntityManager().addEntity(player);
+				Packet00Login loginPacket  = new Packet00Login(player.getUsername(), player.x, player.y, player.id);
+				System.out.println("player" + player.id);
+				
+				if(handler.getGame().getServer() != null) {
+					handler.getGame().getServer().addConnection(player, loginPacket, player.ipAddress, player.port);
+				}
+				loginPacket.writeData(handler.getGame().getSocketClient());
+				System.out.println("Player Id " + handler.getGame().player.id);
+				State.setState(new WaitingState(handler));
+			}else {
+				JOptionPane.showMessageDialog(handler.getGame().getWindow().getFrame(), "Server is already running" , "", JOptionPane.WARNING_MESSAGE);
+			}
+			
+				
 			}}));
 		
 		uiManager.addObject(new ImageButton(220,160 , 32,32, Assets.join, new ClickListener(){
@@ -136,16 +144,20 @@ public class MenuState extends State {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					ClientPlayer player = handler.getGame().player;
-					Packet00Login loginPacket  = new Packet00Login(player.getUsername(), player.x, player.y, player.id);
-					System.out.println("Player Id " + handler.getGame().player.id);
-					if(handler.getGame().getServer() != null) {
-						handler.getGame().getServer().addConnection(player, loginPacket, player.ipAddress, player.port);
+					if(handler.getGame().player.id != -1) {
+						ClientPlayer player = handler.getGame().player;
+						Packet00Login loginPacket  = new Packet00Login(player.getUsername(), player.x, player.y, player.id);
+						System.out.println("Player Id " + handler.getGame().player.id);
+						if(handler.getGame().getServer() != null) {
+							handler.getGame().getServer().addConnection(player, loginPacket, player.ipAddress, player.port);
+						}
+						loginPacket.writeData(handler.getGame().getSocketClient());
+					
+						handler.getMap().getEntityManager().addEntity(player);
+						State.setState(new WaitingState(handler));
+					}else {
+						JOptionPane.showMessageDialog(handler.getGame().getWindow().getFrame(), "Server does not exist" , "", JOptionPane.WARNING_MESSAGE);
 					}
-					loginPacket.writeData(handler.getGame().getSocketClient());
-				
-					handler.getMap().getEntityManager().addEntity(player);
-					State.setState(new WaitingState(handler));
 				}else {
 					JOptionPane.showMessageDialog(handler.getGame().getWindow().getFrame(), "Input Valid Ip Address" , "", JOptionPane.WARNING_MESSAGE);
 				}
@@ -167,7 +179,7 @@ public class MenuState extends State {
 	@Override
 	public void render(Graphics g) {
 		g.clearRect(0, 0, 480, 256);
-//		g.drawImage(image, 0, 0, 480, 256, null);
+		g.drawImage(image, 0, 0, 480, 256, null);
 		g.drawImage(Assets.title, 100, 50, null);
 		uiManager.render(g);
 		displayed = true;

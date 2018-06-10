@@ -24,7 +24,7 @@ public class Server extends Thread{
 	private DatagramSocket socket;
 	private Game game;
 	public int humans = 0, letters;
-	private List<ClientPlayer> connectedPlayers = new ArrayList<ClientPlayer>();
+	public List<ClientPlayer> connectedPlayers = new ArrayList<ClientPlayer>();
 	public long id = 0L;
 	private List<Rectangle> rectangles ;
 	public long letterId = 0L;
@@ -32,11 +32,13 @@ public class Server extends Thread{
 	public Server(Game game) {
 		rectangles = new ArrayList<Rectangle>();
 		this.game = game;
+		game.serverRunning = true;
 		try {
 			this.socket = new DatagramSocket(1131);
 		} catch (SocketException e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(game.getWindow().getFrame(), "Server is already running" , "", JOptionPane.WARNING_MESSAGE);
+//			JOptionPane.showMessageDialog(game.getWindow().getFrame(), "Server is already running" , "", JOptionPane.WARNING_MESSAGE);
+		    game.serverRunning =false;
 		}
 		
 	}
@@ -89,12 +91,12 @@ public class Server extends Thread{
 		    	break;
 		    case DEAD:
 		    	packet = new Packet05DEAD(data);
+		    	packet.writeData(this);
 		    	humans -= 1;
 		    	if(humans== 0) {
 		    		Packet06WIN win = new Packet06WIN(2);
 		    		win.writeData(this);
 		    	}
-		    	packet.writeData(this);
 		    	break;
 		    case Letter:
 		    	letters = slender.length();

@@ -13,6 +13,7 @@ import entities.Letter;
 import main.Game;
 import network.Packet.PacketTypes;
 import states.GameState;
+import states.MenuState;
 import states.State;
 
 
@@ -72,7 +73,8 @@ public class Client extends Thread{
 		    	break;
 		    case MOVE : 
 		    	packet = new Packet02Move(data);
-		    	handleMove((Packet02Move)packet);
+		    	if(game.getHandler().getMap().getEntityManager().getEntities().size() > 0)
+		    		handleMove((Packet02Move)packet);
 		    	break;
 		    case GETID :
 		    	packet = new Packet03GETID(data);
@@ -102,7 +104,13 @@ public class Client extends Thread{
 		    case WIN :
 		    	packet = new Packet06WIN(data);
 		        game.winner = ((int)((Packet06WIN)packet).id);
-			
+			   	  try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			   	  backToMenu();
 		    	break;
 		    case Letter:	
 		    	Packet07Letter letter = new Packet07Letter(data);
@@ -159,4 +167,17 @@ public class Client extends Thread{
 		game.getHandler().getMap().getEntityManager().setDead(id);
 	}
 	
+	public void backToMenu() {
+		states.State.setState(new MenuState(game.getHandler()));
+	    if(game.socketServer != null) {
+	    	game.socketServer.connectedPlayers.clear();
+	    	game.socketServer.id = 0L;
+	    	game.socketServer.letterId = 0L;
+	    }
+		game.socketClient = null;
+		game.winner = 0;
+		game.getHandler().getMap().getEntityManager().getEntities().clear();
+		game.getHandler().getMap().getEntityManager().getLetters().clear();
+		
+	}
 }

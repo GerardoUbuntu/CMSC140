@@ -13,9 +13,11 @@ import java.net.InetAddress;
 
 import Imageloader.Animation;
 import Imageloader.Assets;
+import Imageloader.Text;
 import listeners.KeyManager;
 import main.Handler;
 import network.Packet02Move;
+import states.State;
 
 public class ClientPlayer extends Creature {
 
@@ -143,18 +145,23 @@ public class ClientPlayer extends Creature {
 		  }
 		  if(handler.getGame().winner == 2) {
 			  g.setColor(Color.RED);
-			  g.setFont(new Font("default", Font.BOLD,32));
-          	  g.drawString("SlenderMan Wins", 130, 32);
+//			  g.setFont(new Font("default", Font.BOLD,32));
+//          	  g.drawString("SlenderMan Wins", 130, 32);
+			  Text.drawString(g, "SlenderMan Wins", 130, 32, false, Color.RED, Assets.tat30	);
           	  pause = 1;
 		  }else if(handler.getGame().winner == 1) {
 			  g.setColor(Color.BLUE);
-			  g.setFont(new Font("default", Font.BOLD,32));
-          	  g.drawString("Humans Wins", 130, 32);
+//			  g.setFont(new Font("default", Font.BOLD,32));
+//          	  g.drawString("Humans Wins", 130, 32);
+			  Text.drawString(g, "Humans Win", 130, 32, false, Color.BLUE, Assets.tm30);
           	  pause = 1;
+         
 		  }
 		  if(dead == 0) {
 			  g.setFont(new Font("default", Font.BOLD, 16));
-          	  g.drawString(this.username, (int)(x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()) - 5);
+			  Color color = type == 1 ? Color.RED : Color.BLUE;
+			  Text.drawString(g, this.username,(int)(x - handler.getGameCamera().getxOffset()) + 16, (int) (y - handler.getGameCamera().getyOffset()) - 5, true, color, Assets.silk12);
+//          	  g.drawString(this.username, (int)(x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()) - 5);
     		  g.drawImage(getCurrentAnimationFrame(), (int)(x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height,null);
 		  }else if(dead == 1 && keymanager != null) {
 			  g.setColor(Color.RED);
@@ -207,4 +214,6 @@ public class ClientPlayer extends Creature {
 	public void setMove(int move) {
 		this.move = move;
 	}
+	
+
 }

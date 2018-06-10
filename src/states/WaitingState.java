@@ -3,10 +3,14 @@ package states;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import javax.swing.ImageIcon;
+
 import Imageloader.Assets;
+import Imageloader.Text;
 import entities.ClientPlayer;
 import entities.Entity;
 import listeners.WindowHandler;
@@ -27,10 +31,11 @@ public class WaitingState extends State {
 
 	private UIManager uiManager;
 	private int size;
-	
+	private Image image;
 	public WaitingState(Handler handler) {
 		super(handler);
 		uiManager = new UIManager(handler);
+		image = new ImageIcon(getClass().getResource("/images/menubg.gif")).getImage();
 		handler.getMouseManager().setUIManager(uiManager);
 		if(handler.getGame().getServer() != null) {
 			uiManager.addObject(new ImageButton(400,180 , 32,32, Assets.start, new ClickListener(){
@@ -52,7 +57,8 @@ public class WaitingState extends State {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					State.setState(new GameState(handler));
+					handler.getGame().gameState = new GameState(handler);
+					State.setState(handler.getGame().gameState );
 				}}));
 		
 		}
@@ -68,12 +74,13 @@ public class WaitingState extends State {
 
 	@Override
 	public void render(Graphics g) {
-//		g.drawImage(Assets.bg, 0, 0, 480, 256, null);
+	    g.clearRect(0, 0, 480, 256);
+		g.drawImage(image, 0, 0, 480, 256, null);
 		g.setFont(new Font("default", Font.BOLD, 16));
 		g.setColor(Color.BLACK);
-	    g.drawString("LOBBY", 210, 20);
-	    g.drawString("Players", 200, 40);
-		int y = 60;
+		Text.drawString(g, "LOBBY",  200, 20,false, Color.BLACK, Assets.tat30);
+		Text.drawString(g, "Players",  20, 50,false, Color.BLACK, Assets.tm30);
+		int y = 70;
 	    ArrayList<Entity> players = new ArrayList<Entity>();
 	    g.setColor(Color.RED);
 	    for(int i =0; i < handler.getMap().getEntityManager().getEntities().size(); i++) {
@@ -84,7 +91,7 @@ public class WaitingState extends State {
 		     }
 	    }
 		for(Entity e : players){
-	    	   g.drawString(players.indexOf(e)+1 + ". " +((ClientPlayer)e).getUsername(), 0, y);
+			   Text.drawString(g, players.indexOf(e)+1 + ". " +((ClientPlayer)e).getUsername(),  0, y, false, Color.RED, Assets.silk20);
 	    	   y += 20;
 	    }
 		uiManager.render(g);	

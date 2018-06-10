@@ -1,11 +1,13 @@
 package Imageloader;
 
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 
 
 
 public class Assets {
 	
+	public static Font silk12, silk20, tat30, tm30;
 	public static BufferedImage back,rock,grass, bg, title, s, l,e, n, d, r, m, a;
 	public static BufferedImage[] slender_down;
 	public static BufferedImage[] slender_up;
@@ -21,6 +23,11 @@ public class Assets {
 	public static int width = 32, height =32;
 	
 	public static void init(){
+		
+		silk12 = FontLoader.loadFont("res/fonts/silkscreen/slkscr.ttf", 12);
+		tm30 =  FontLoader.loadFont("res/fonts/tat/tat.ttf", 30);
+        tat30 = FontLoader.loadFont("res/fonts/tm/tm.ttf", 30);
+		silk20 = FontLoader.loadFont("res/fonts/silkscreen/slkscr.ttf", 20);
 		sheet = new SpriteSheet(ImageLoader.loadImage("/images/sprite.png"));
 		sheet1 = new SpriteSheet(ImageLoader.loadImage("/images/slender.png"));
 		bg  = ImageLoader.loadImage("/images/menubg.gif");
