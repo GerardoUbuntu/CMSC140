@@ -17,7 +17,7 @@ public class Assets {
 	public static BufferedImage[] human_up;
 	public static BufferedImage[] human_right;
 	public static BufferedImage[] human_left;
-	public static BufferedImage[] start, quit, create, join;
+	public static BufferedImage[] start, quit, create, join, back2, help;
 	private static SpriteSheet sheet; 
 	private static SpriteSheet sheet1; 
 	public static int width = 32, height =32;
@@ -40,8 +40,14 @@ public class Assets {
 		quit= new BufferedImage[2];
 		create = new BufferedImage[2];
 		join = new BufferedImage[2];
+		back2 = new BufferedImage[2];
+		help = new BufferedImage[2];
 		start[0] = ImageLoader.loadImage("/images/Photos/Start.png");
 		start[1] = ImageLoader.loadImage("/images/Photos/Start1.png");
+		back2[0] = ImageLoader.loadImage("/images/Photos/back.png");
+		back2[1] = ImageLoader.loadImage("/images/Photos/back1.png");
+		help[0] = ImageLoader.loadImage("/images/Photos/help.png");
+		help[1] = ImageLoader.loadImage("/images/Photos/help1.png");
 		create[0] = ImageLoader.loadImage("/images/Photos/create.png");
 		create[1] = ImageLoader.loadImage("/images/Photos/create1.png");
 		join[0] = ImageLoader.loadImage("/images/Photos/join.png");

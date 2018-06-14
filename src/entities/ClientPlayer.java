@@ -19,7 +19,7 @@ import main.Handler;
 import network.Packet02Move;
 import states.State;
 
-public class ClientPlayer extends Creature {
+public class ClientPlayer extends Creature implements Comparable<ClientPlayer> {
 
 	//Animation
 	private Animation down;
@@ -34,9 +34,12 @@ public class ClientPlayer extends Creature {
 	public KeyManager keymanager;
 	
 	private boolean isMoving;
-    public long id;
+    public long id, tick =0;
     public int type = 0, dead=0, pause =0;
-	
+    public boolean removeLight,  slowdown;
+	public int countdown=3;
+	public float tempSpeed = 1, saveSpeed =0;
+    
 	public ClientPlayer(Handler handler, KeyManager keymanager,  float x, float y, int width, int height, String username, InetAddress ipAddress, int port, long id) {
 		super(handler, x, y, Creature.DEFAULT_WIDTH, Creature.DEFAULT_HEIGHT);
 		this.handler = handler;
@@ -82,7 +85,20 @@ public class ClientPlayer extends Creature {
         left.tick();
         right.tick();
 		getInput();	
-	}
+		if(slowdown) {
+			tick++;
+			if(tick == 100) {
+				this.speed = this.saveSpeed;
+				slowdown = false;
+			}
+		}
+		if(removeLight) {
+			tick++;
+			if(tick == 100) {
+				removeLight = false;
+			}
+		}
+	}	
 	
 	public void getInput(){
 		if(keymanager!=null && pause == 0) {
@@ -119,10 +135,7 @@ public class ClientPlayer extends Creature {
 
 	@Override
 	public void render(Graphics g) {
-		 Graphics2D g2d = (Graphics2D) g;
-		  Area a = new Area(new Rectangle(0, 0, 480, 256));
-		  a.subtract(new Area(new Ellipse2D.Double((int)(x - handler.getGameCamera().getxOffset())-31,  (int) (y - handler.getGameCamera().getyOffset())-30, 100, 100)));
-		  
+		 Graphics2D g2d = (Graphics2D) g;	  
 //	      int xPoly[] = new int[3];
 //	      int yPoly[]= new int[3];
 //	      if(move == 0){
@@ -139,10 +152,13 @@ public class ClientPlayer extends Creature {
 //	    	  yPoly = new int[]{(int) (y - handler.getGameCamera().getyOffset()) -84,(int) (y - handler.getGameCamera().getyOffset()) + 16, (int) (y - handler.getGameCamera().getyOffset()) + 116};
 //	      }
 //		  a.subtract(new Area(new Polygon(xPoly,yPoly, 3)));
-		  if(keymanager!=null && type != 1 && dead == 0) {
-			  g2d.setColor(Color.BLACK);
-			  g2d.fill(a);
+		   Area a = new Area(new Rectangle(0, 0, 480, 256));
+		  
+		  if(type == 1 && slowdown) {
+			  this.saveSpeed = this.speed;
+			  this.speed = tempSpeed;
 		  }
+		
 		  if(handler.getGame().winner == 2) {
 			  g.setColor(Color.RED);
 //			  g.setFont(new Font("default", Font.BOLD,32));
@@ -168,11 +184,37 @@ public class ClientPlayer extends Creature {
 			  g.setFont(new Font("default", Font.BOLD,32));
           	  g.drawString("You're Dead", 180, 100);
 		  }
-    		  g.setColor(Color.RED);
-          g.fillRect((int)(x + bounds.x - handler.getGameCamera().getxOffset()), (int)(y + bounds.y - handler.getGameCamera().getyOffset()), bounds.width, bounds.height);
+		 
+																									
+		  if(keymanager!=null && type != 1 && dead == 0) {
+			  if(removeLight) {
+			      g2d.setColor(Color.BLACK);
+			      g2d.fill(a);
+			  }else {
+				 g2d.setColor(Color.BLACK);
+				 a.subtract(new Area(new Ellipse2D.Double((int)(x - handler.getGameCamera().getxOffset())-21,  (int) (y - handler.getGameCamera().getyOffset())-20, 70, 70)));
+			     g2d.fill(a);
+			  }
+		  }
+			  
+//          g.fillRect((int)(x + bounds.x - handler.getGameCamera().getxOffset()), (int)(y + bounds.y - handler.getGameCamera().getyOffset()), bounds.width, bounds.height);
+		     if(keymanager != null) {
+				 addStats(g);
+			 }
 	}
 	
-	 private BufferedImage getCurrentAnimationFrame(){
+	 private void addStats(Graphics g) {
+		 if(type == 0) {
+			 Text.drawString(g, "P:" + handler.getGame().noPlayers, 350, 20, false, Color.BLUE, Assets.silk20);
+			 Text.drawString(g, "H:" + this.DEFAULT_HEALTH, 390, 20, false, Color.RED, Assets.silk20);
+			 Text.drawString(g, "L:" + handler.getGame().noLetters, 430, 20, false, Color.YELLOW, Assets.silk20);
+		 }else {
+			 Text.drawString(g, "P:" + handler.getGame().noPlayers, 390, 20, false, Color.BLUE, Assets.silk20);
+			 Text.drawString(g, "L:" + handler.getGame().noLetters, 430, 20, false, Color.YELLOW, Assets.silk20);
+		 }
+	 }
+
+	private BufferedImage getCurrentAnimationFrame(){
 			BufferedImage movingDir = null;
 			
 		    if(move == 3){
@@ -193,6 +235,7 @@ public class ClientPlayer extends Creature {
 		up = new Animation(100, Assets.slender_up);
 		left = new Animation(100, Assets.slender_left);
 		right = new Animation(100, Assets.slender_right);
+		speed = 2;																														
 	}
 	
 	public String getUsername() {
@@ -213,6 +256,19 @@ public class ClientPlayer extends Creature {
 
 	public void setMove(int move) {
 		this.move = move;
+	}
+
+	@Override
+	public int compareTo(ClientPlayer o) {
+		int returnVal = 0;
+		if(this.id < o.id)
+			returnVal = -1;
+		else if(this.id > o.id)
+			returnVal = 1;
+		else if(this.id == o.id)
+			returnVal = 0;
+		
+		return returnVal;
 	}
 	
 

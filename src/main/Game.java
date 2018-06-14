@@ -29,6 +29,9 @@ public class Game implements Runnable {
 	private BufferStrategy bs;
 	private Graphics g;
 	public boolean serverRunning = false;
+	public boolean isServer;
+	public int noLetters =10; 
+	public int noPlayers;
 	//states
 	public State gameState;
 	public State menuState;
@@ -86,7 +89,7 @@ public class Game implements Runnable {
 			}
 			
 			if(timer >= 1000000000){
-				///System.out.println("Ticks and Frames: " + ticks);
+//				System.out.println("Ticks and Frames: " + ticks);
 				ticks = 0;
 				timer = 0;
 			}

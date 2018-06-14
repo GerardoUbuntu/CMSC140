@@ -36,7 +36,6 @@ public class Server extends Thread{
 		try {
 			this.socket = new DatagramSocket(1131);
 		} catch (SocketException e) {
-			e.printStackTrace();
 //			JOptionPane.showMessageDialog(game.getWindow().getFrame(), "Server is already running" , "", JOptionPane.WARNING_MESSAGE);
 		    game.serverRunning =false;
 		}
@@ -81,7 +80,7 @@ public class Server extends Thread{
 		    	break;
 		    case MOVE:
 		    	packet = new Packet02Move(data);
-		    	System.out.println(((Packet02Move)packet).getUsername() +" has moved to" + ((Packet02Move)packet).getX() + "," +  ((Packet02Move)packet).getY());
+//		    	System.out.println(((Packet02Move)packet).getUsername() +" has moved to" + ((Packet02Move)packet).getX() + "," +  ((Packet02Move)packet).getY());
 		    	this.handleMove(((Packet02Move)packet));
 		    	break;
 		    case GETID:
@@ -90,9 +89,10 @@ public class Server extends Thread{
 		    	sendData(packet.getData(), address, port);
 		    	break;
 		    case DEAD:
-		    	packet = new Packet05DEAD(data);
-		    	packet.writeData(this);
 		    	humans -= 1;
+		    	packet = new Packet05DEAD(data);
+		    	((Packet05DEAD)packet).noPlayers = humans;
+		    	packet.writeData(this);    	
 		    	if(humans== 0) {
 		    		Packet06WIN win = new Packet06WIN(2);
 		    		win.writeData(this);
@@ -103,20 +103,33 @@ public class Server extends Thread{
 		    	for(int i=0; i<slender.length(); i++) {
 		    		Rectangle coord1 = getCoord();
 		    		Packet07Letter letter = new Packet07Letter(coord1.x, coord1.y , (int)(getLetterId()), ""+slender.charAt(i));
-		    		System.out.println("add" + letter.id);
+//		    		System.out.println("add" + letter.id);
 		    		letter.writeData(this);
 		    	}
 		    	break;
 		    case PICK:	
+		    	letters -=1 ;
 	    		Packet10PICK pick = new Packet10PICK(data);
+	    		pick.noLetters = letters;
 	    		pick.writeData(this);
-	    		letters -=1 ;
 	    		if(letters == 0) {
 		    		Packet06WIN win = new Packet06WIN(1);
 		    		win.writeData(this);
 		    	}
 		    	break;
-		    	
+		    case QUIT:
+		    	Packet11QUIT quit = new Packet11QUIT(data);
+		    	this.connectedPlayers.remove(getClientPlayerIndex(quit.playerId));
+		    	quit.writeData(this);
+		    	break;
+		    case TOUCH: 
+		    	Packet12TOUCH touch = new Packet12TOUCH(data);
+		    	touch.writeData(this);
+		    	break;
+		    case SLOW:
+		    	Packet13SLOW slow = new Packet13SLOW(data);
+				slow.writeData(this);
+				break;
 		}
 		
 	}

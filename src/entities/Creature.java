@@ -7,6 +7,7 @@ import tile.Tile;
 public abstract class Creature extends Entity {
 	
 	public static final float DEFAULT_SPEED = 3.0f;
+	public int DEFAULT_HEALTH = 2;
 	protected float speed;
 	public static final int DEFAULT_WIDTH = 32, DEFAULT_HEIGHT = 32;
     protected float xMove, yMove; 

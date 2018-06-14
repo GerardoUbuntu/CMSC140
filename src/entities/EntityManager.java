@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import main.Handler;
+import network.Packet05DEAD;
+import network.Packet13SLOW;
 
 public class EntityManager {
     
@@ -161,6 +163,38 @@ public class EntityManager {
 		}
 		System.out.println(this.letters.get(index).letter);
 		this.letters.get(index).visible = 0;
+	}
+	
+	public void setSlow(int id) {
+		 int index = getClientPlayerIndex(id);
+		 ClientPlayer player = (ClientPlayer) getEntities().get(index);
+		 player.slowdown = true;
+
+	}
+	
+	public void minusHealth(int slenderId, int playerId) {
+		if(getEntities().size() != 1) {
+			 System.out.println("PlayerId: "+  playerId +"slenderId: " + slenderId + " size: " + getEntities().size());
+			 int index = getClientPlayerIndex(playerId);
+			 ClientPlayer player = (ClientPlayer) getEntities().get(index);
+			 player.DEFAULT_HEALTH -= 1;
+			 if(player.DEFAULT_HEALTH == 0) {
+				 if(handler.getGame().player.id == playerId) {
+						Packet05DEAD dead = new Packet05DEAD(playerId, -1);
+						dead.writeData(handler.getGame().socketClient);
+						System.out.println("Yeah yeah yeah "  + playerId );	
+				 }
+//				 setDead((int)player.id);
+			 }
+			 else if (player.DEFAULT_HEALTH > 0) {
+				 if(handler.getGame().player.id == playerId) {
+					handler.getGame().player.removeLight = true;
+				 }else if(handler.getGame().player.id == slenderId)  {
+					 Packet13SLOW slow = new Packet13SLOW(slenderId);
+				     slow.writeData(handler.getGame().socketClient);
+				 }
+			 }
+		}
 	}
     
 }

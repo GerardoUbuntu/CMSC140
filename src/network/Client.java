@@ -87,10 +87,10 @@ public class Client extends Thread{
 		    	GameState state = new GameState(game.getHandler());
 		    	packet = new Packet04START(data);
 		    	modifyPlayer(((Packet04START)packet).id);
+		    	game.noPlayers = game.getHandler().getMap().getEntityManager().getEntities().size()-1;
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(1500);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		    	game.getHandler().getGameCamera().centerOnEntity(game.player);
@@ -98,14 +98,15 @@ public class Client extends Thread{
 		        break;
 		    case DEAD :
 		    	packet = new Packet05DEAD(data);
+		    	game.noPlayers = ((Packet05DEAD)packet).noPlayers;
 		    	setDead((int)((Packet05DEAD)packet).id);
-			
+			    
 		    	break;
 		    case WIN :
 		    	packet = new Packet06WIN(data);
 		        game.winner = ((int)((Packet06WIN)packet).id);
 			   	  try {
-						Thread.sleep(1000);
+						Thread.sleep(2000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -114,14 +115,16 @@ public class Client extends Thread{
 		    	break;
 		    case Letter:	
 		    	Packet07Letter letter = new Packet07Letter(data);
-		    	System.out.println("received" + letter.id);
+//		    	System.out.println("received" + letter.id);
 		    	game.getHandler().getMap().getEntityManager().addLetter(new Letter(game.getHandler(), (float)(letter.x), (float)(letter.y), (int)(letter.id), letter.letter));
-		        System.out.println("Letter Added");
+//		        System.out.println("Letter Added");
+		    	
 		    	break;
 		    case PICK:	
 	    		Packet10PICK pick = new Packet10PICK(data);
 	    		System.out.println("add pick" + pick.letterId);
-	    		game.getHandler().getMap().getEntityManager().setInvisible(pick.letterId);;
+	    		game.getHandler().getMap().getEntityManager().setInvisible(pick.letterId);
+	    		game.noLetters = pick.noLetters;
 	    		System.out.println("Letter Removed" + pick.letterId);
 //			try {
 //				Thread.sleep(500);
@@ -129,9 +132,36 @@ public class Client extends Thread{
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
+	    		 if(game.player.type == 1)
+			        	game.player.setSpeed((float)(game.player.getSpeed() + (1/10)));
 		    	break;
-		    	
-		    	
+		    case QUIT:  	
+		    	Packet11QUIT quit = new Packet11QUIT(data);
+		    	if(quit.isServer == 1) {
+		    		backToMenu();
+		    	}else {
+		    		game.getHandler().getMap().getEntityManager().removeClientPlayer(quit.playerId);
+		    	}
+		    	break;
+		    case TOUCH:
+		    	System.out.println("Touch " + game.getHandler().getMap().getEntityManager().getEntities().size());
+		    	Packet12TOUCH touch = new  Packet12TOUCH(data);
+		    	game.getHandler().getMap().getEntityManager().minusHealth((int)touch.slenderId, (int)touch.playerId);
+//		    	if(game.getHandler().getMap().getEntityManager().getEntities().size() == 1) {
+//					 game.winner = 2;
+//				 } 	 
+//				 try {
+//						Thread.sleep(3000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			   	backToMenu();
+		    	break;
+		    case SLOW:
+		    	Packet13SLOW slow = new Packet13SLOW(data);
+		    	game.getHandler().getMap().getEntityManager().setSlow((int)slow.id);
+		    	break;
 		}
 		
 	}
@@ -147,7 +177,6 @@ public class Client extends Thread{
 	}
 	
 	private void handleMove(Packet02Move packet) {
-		System.out.println("Packet Id " + packet.id);
 		game.getHandler().getMap().getEntityManager().movePlayer(packet.id, packet.getX(), packet.getY(), packet.isMoving(), packet.getMove());
 	}
 	
@@ -169,15 +198,14 @@ public class Client extends Thread{
 	
 	public void backToMenu() {
 		states.State.setState(new MenuState(game.getHandler()));
-	    if(game.socketServer != null) {
+		if(game.socketServer != null) {
 	    	game.socketServer.connectedPlayers.clear();
 	    	game.socketServer.id = 0L;
 	    	game.socketServer.letterId = 0L;
 	    }
 		game.socketClient = null;
-		game.winner = 0;
+		game.winner = 0;	
 		game.getHandler().getMap().getEntityManager().getEntities().clear();
-		game.getHandler().getMap().getEntityManager().getLetters().clear();
-		
+		game.getHandler().getMap().getEntityManager().getLetters().clear();		
 	}
 }

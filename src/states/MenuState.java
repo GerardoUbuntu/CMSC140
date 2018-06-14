@@ -76,6 +76,7 @@ public class MenuState extends State {
 				System.out.println("running" +isRunning);
 				
 			if(handler.getGame().serverRunning )	{
+				handler.getGame().isServer = true;
 				if(!isRunning)
 					handler.getGame().socketServer.start();
 				handler.getGame().socketClient = new Client(handler.getGame(), networkUtil.getCurrentEnvironmentNetworkIp());
@@ -145,6 +146,7 @@ public class MenuState extends State {
 						e.printStackTrace();
 					}
 					if(handler.getGame().player.id != -1) {
+					    handler.getGame().isServer = false;
 						ClientPlayer player = handler.getGame().player;
 						Packet00Login loginPacket  = new Packet00Login(player.getUsername(), player.x, player.y, player.id);
 						System.out.println("Player Id " + handler.getGame().player.id);

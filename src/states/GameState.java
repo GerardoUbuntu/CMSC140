@@ -16,6 +16,7 @@ public class GameState extends State{
 	
 	private Map map;
 	private UIManager uiManager;
+	public long tick;
 	
 	public GameState(Handler handler) {
 		super(handler);
