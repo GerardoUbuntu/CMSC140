@@ -238,17 +238,24 @@ public class Server extends Thread{
 	public Rectangle getCoord() {
 		Random rand = new Random(); 
 		int x, y;
+		Rectangle rect = null;
+		if (rectangles != null && !rectangles.isEmpty()) {
+			rect = rectangles.get(rectangles.size()-1);
+		}
+		
 		while(true) {
-			x = rand.nextInt(1580); 
-		    y = rand.nextInt(570);
-		    if(!(game.getHandler().getMap().getTile((x+32)/Tile.TILE_WIDTH, (y+32)/Tile.TILE_HEIGHT).isSolid()) && !(rectangles.contains(new Rectangle(x, y, 32,32))))
+			x = rand.nextInt(1546); 
+		    y = rand.nextInt(506);
+		    
+		  if(!(game.getHandler().getMap().getTile((x+32)/Tile.TILE_WIDTH, (y+32)/Tile.TILE_HEIGHT).isSolid()) && !(rectangles.contains(new Rectangle(x, y, 32,32))) )
 		    	break;
+			
 		}   
 		rectangles.add(new Rectangle(x, y, 32,32));
 		return new Rectangle(x, y, 32,32);
 	}
 	
-	public int SlenderId() {
+	public int SlenderId() {	
 		Random rand = new Random(); 
 		humans = connectedPlayers.size() - 1;
 		return rand.nextInt(connectedPlayers.size()); 
