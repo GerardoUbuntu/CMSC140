@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.OptionPaneUI;
 
 import Imageloader.Assets;
 import entities.ClientPlayer;
