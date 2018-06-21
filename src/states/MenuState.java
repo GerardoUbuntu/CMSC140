@@ -63,7 +63,7 @@ public class MenuState extends State {
 
 				handler.getGame().windowHandler = new WindowHandler(handler.getGame());
 				NetworkUtil networkUtil = new NetworkUtil();
-				
+				handler.getGame().address = networkUtil.getCurrentEnvironmentNetworkIp();
 				System.out.println(networkUtil.getCurrentEnvironmentNetworkIp());
 				
 				

@@ -47,6 +47,7 @@ public class Game implements Runnable {
 	public Client socketClient;
 	public Server socketServer = null;
     public int winner = 0; 
+    public String address = "";
 	public ClientPlayer player;
 	public Game(String title, int width, int height) {
 		this.height = height;

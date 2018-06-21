@@ -91,7 +91,10 @@ public class WaitingState extends State {
 		g.drawImage(image, 0, 0, 480, 256, null);
 		g.setFont(new Font("default", Font.BOLD, 16));
 		g.setColor(Color.BLACK);
-		Text.drawString(g, "LOBBY",  200, 20,false, Color.BLACK, Assets.tat30);
+		if(handler.getGame().isServer)
+			Text.drawString(g, "LOBBY: " + handler.getGame().address,  150, 20,false, Color.BLACK, Assets.tat30);
+		else
+			Text.drawString(g, "LOBBY",  200, 20,false, Color.BLACK, Assets.tat30);
 		Text.drawString(g, "Players",  20, 50,false, Color.BLACK, Assets.tm30);
 		int y = 70;
 	    ArrayList<ClientPlayer> players = new ArrayList<ClientPlayer>();
