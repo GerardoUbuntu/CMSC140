@@ -33,7 +33,6 @@ import network.NetworkUtil;
 import network.Packet00Login;
 import network.Packet03GETID;
 import network.Server;
-
 import Imageloader.Assets;
 import main.Handler;
 import ui.ClickListener;
@@ -64,7 +63,7 @@ public class MenuState extends State {
 			e1.printStackTrace();
 		}
         image = new ImageIcon(getClass().getResource("/images/menubg.gif")).getImage();
-		uiManager.addObject(new ImageButton(220,130 , 32,32, Assets.create, new ClickListener(){
+		uiManager.addObject(new ImageButton(220,100 , 32,32, Assets.create, new ClickListener(){
 
 			@Override
 			public void onClick() {
@@ -122,7 +121,7 @@ public class MenuState extends State {
 				
 			}}));
 		
-		uiManager.addObject(new ImageButton(220,160 , 32,32, Assets.join, new ClickListener(){
+		uiManager.addObject(new ImageButton(220,130 , 32,32, Assets.join, new ClickListener(){
 
 			@Override
 			public void onClick() {
@@ -173,7 +172,13 @@ public class MenuState extends State {
 				}
 			}}));
 		
-		
+		uiManager.addObject(new ImageButton(220,160 , 32,32, Assets.help, new ClickListener(){
+
+
+			@Override
+			public void onClick() {
+				State.setState(new HelpState(handler));
+			}}));
 		
 		uiManager.addObject(new ImageButton(220,190 , 32,32, Assets.quit, new ClickListener(){
 
@@ -190,7 +195,7 @@ public class MenuState extends State {
 	public void render(Graphics g) {
 		g.clearRect(0, 0, 480, 256);
 		g.drawImage(image, 0, 0, 480, 256, null);
-		g.drawImage(Assets.title, 100, 50, null);
+		g.drawImage(Assets.title, 89, 20, null);
 		uiManager.render(g);
 		displayed = true;
 	}

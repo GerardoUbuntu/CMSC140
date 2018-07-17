@@ -9,7 +9,14 @@ public class Tile {
 
 	public static Tile[] tiles = new Tile[256];
 	public static Tile grassTile = new GrassTile(0);
+	public static Tile groundTile = new GroundTile(1);
 	public static Tile rockTile = new RockTile(2);
+	public static Tile treeTile = new TreeTile(3);
+	public static Tile bushTile = new BushTile(4);
+	public static Tile stoneTile = new StoneTile(5);
+	public static Tile cuttreeTile = new CutTreeTile(6);
+	public static Tile spookytreeTile = new SpookyTreeTile(7);
+	public static Tile bigrockTile = new BigRockTile(8);
 	
 	public static final int TILE_WIDTH = 32, TILE_HEIGHT = 32;
 	
