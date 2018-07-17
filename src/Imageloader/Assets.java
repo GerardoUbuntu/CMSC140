@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 public class Assets {
 	
 	public static Font silk12, silk20, tat30, tm30;
-	public static BufferedImage back,rock,grass, bg, title, s, l,e, n, d, r, m, a;
+	public static BufferedImage back,rock,grass,ground,tree,cuttree,spookytree,bigrock, bg,stone,bush, title, s, l,e, n, d, r, m, a;
 	public static BufferedImage[] slender_down;
 	public static BufferedImage[] slender_up;
 	public static BufferedImage[] slender_right;
@@ -34,7 +34,14 @@ public class Assets {
 		back = ImageLoader.loadImage("/images/Horizon.png");
 		rock = ImageLoader.loadImage("/images/rock.png");
 		grass = ImageLoader.loadImage("/images/grass.png");
+		ground = ImageLoader.loadImage("/images/ground.png");
+		tree = ImageLoader.loadImage("/images/tree.png");
+		spookytree = ImageLoader.loadImage("/images/spookytree.png");
+		stone = ImageLoader.loadImage("/images/stone.png");
+		bush = ImageLoader.loadImage("/images/bush.png");
+		bigrock = ImageLoader.loadImage("/images/bigrock.png");
 		title = ImageLoader.loadImage("/images/Photos/hadsd.png");
+		cuttree = ImageLoader.loadImage("/images/cuttree.png");
 		
 		start = new BufferedImage[2];
 		quit= new BufferedImage[2];

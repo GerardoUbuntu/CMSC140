@@ -16,6 +16,7 @@ import network.NetworkUtil;
 import network.Packet00Login;
 import network.Server;
 import states.GameState;
+import states.HelpState;
 import states.MenuState;
 import states.State;
 
@@ -147,7 +148,7 @@ public class Game implements Runnable {
 		keyManager.tick();
 		if(State.getState() != null)
 			State.getState().update();
-		if(!(State.getState() instanceof MenuState))
+		if(!(State.getState() instanceof MenuState) && !(State.getState() instanceof HelpState))
 			socketClient.sendData("ping".getBytes());
 	}
     

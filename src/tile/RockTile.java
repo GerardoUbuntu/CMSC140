@@ -11,5 +11,4 @@ public class RockTile extends Tile{
 	public boolean isSolid(){
 		return true;
 	}
-
 }
