@@ -126,7 +126,7 @@ public class MenuState extends State {
 			@Override
 			public void onClick() {
 				Pattern ptn = Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$");
-				String ip = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter remote IP address: ", JOptionPane.PLAIN_MESSAGE);
+				String ip = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), getPanel(), "Please Enter remote IP address: ", JOptionPane.PLAIN_MESSAGE);
 				Matcher mtch = ptn.matcher(ip);
 //				while(! mtch.find() ) {
 //					JOptionPane.showMessageDialog(handler.getGame().getWindow().getFrame(), "Input Valid Ip Address" , "", JOptionPane.WARNING_MESSAGE);
@@ -139,7 +139,7 @@ public class MenuState extends State {
 					handler.getGame().windowHandler = new WindowHandler(handler.getGame());
 					Map map = new Map(handler,"res/map/map1.txt");
 					String name = "No Name";
-					String input = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter a user name: ", JOptionPane.PLAIN_MESSAGE);
+					String input = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), getPanel(), "Please Enter a user name: ", JOptionPane.PLAIN_MESSAGE);
 					name = input == null ? name : input;
 					handler.getGame().player = new ClientPlayer(handler, handler.getKeyManager(),100, 100, 50, 50, 
 							name, null, -1, -1);
