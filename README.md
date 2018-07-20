@@ -10,5 +10,9 @@ Collision with slenderman will make the whole screen dark.
 The first one who achieved their goal wins.
 
 
+"Developers"
+Abantao,Gerardo Jr. A.
+Alcober,Kobe Beau G.
+Castillo, Carl Francis G.
 
 
