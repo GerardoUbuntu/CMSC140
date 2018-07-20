@@ -88,7 +88,7 @@ public class MenuState extends State {
 					handler.getGame().socketServer.start();
 				handler.getGame().socketClient = new Client(handler.getGame(), networkUtil.getCurrentEnvironmentNetworkIp());
 				handler.getGame().socketClient.start();
-				Map map = new Map(handler,"res/map/map1.txt");
+				Map map = new Map(handler,"/map/map1.txt");
 				handler.setMap(map);
 				String name = "Player Name";
 				String input = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), getPanel(), "Please Enter a user name: ", JOptionPane.PLAIN_MESSAGE);
