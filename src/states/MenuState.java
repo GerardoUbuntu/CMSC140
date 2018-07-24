@@ -63,7 +63,7 @@ public class MenuState extends State {
 			e1.printStackTrace();
 		}
         image = new ImageIcon(getClass().getResource("/images/menubg.gif")).getImage();
-		uiManager.addObject(new ImageButton(220,100 , 32,32, Assets.create, new ClickListener(){
+		uiManager.addObject(new ImageButton(195,160,240, 63, Assets.create, new ClickListener(){
 
 			@Override
 			public void onClick() {
@@ -121,7 +121,7 @@ public class MenuState extends State {
 				
 			}}));
 		
-		uiManager.addObject(new ImageButton(220,130 , 32,32, Assets.join, new ClickListener(){
+		uiManager.addObject(new ImageButton(195,225 , 240,63, Assets.join, new ClickListener(){
 
 			@Override
 			public void onClick() {
@@ -172,7 +172,7 @@ public class MenuState extends State {
 				}
 			}}));
 		
-		uiManager.addObject(new ImageButton(220,160 , 32,32, Assets.help, new ClickListener(){
+		uiManager.addObject(new ImageButton(195,290 , 240,63, Assets.help, new ClickListener(){
 
 
 			@Override
@@ -180,7 +180,7 @@ public class MenuState extends State {
 				State.setState(new HelpState(handler));
 			}}));
 		
-		uiManager.addObject(new ImageButton(220,190 , 32,32, Assets.quit, new ClickListener(){
+		uiManager.addObject(new ImageButton(195,355 , 240,63, Assets.quit, new ClickListener(){
 
 
 			@Override
@@ -193,9 +193,9 @@ public class MenuState extends State {
 
 	@Override
 	public void render(Graphics g) {
-		g.clearRect(0, 0, 480, 256);
-		g.drawImage(image, 0, 0, 480, 256, null);
-		g.drawImage(Assets.title, 89, 20, null);
+		g.clearRect(0, 0, 640, 480);
+		g.drawImage(image, 0, 0, 640,480, null);
+		g.drawImage(Assets.title, 65,30, 485, 110, null);
 		uiManager.render(g);
 		displayed = true;
 	}
