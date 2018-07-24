@@ -1,5 +1,6 @@
 package states;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -8,15 +9,18 @@ import java.awt.Toolkit;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferStrategy;
+import java.io.IOException;
 import java.net.BindException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.plaf.OptionPaneUI;
 
 import Imageloader.Assets;
@@ -46,6 +50,9 @@ public class MenuState extends State {
 	public MenuState(Handler handler) {
 		super(handler);
 		uiManager  = new UIManager(handler);
+		javax.swing.UIManager.put("OptionPane.background", Color.DARK_GRAY);
+		javax.swing.UIManager.put("Panel.background", Color.DARK_GRAY);
+		javax.swing.UIManager.put("Button.background", Color.LIGHT_GRAY);
 		handler.getMouseManager().setUIManager(uiManager);
 	    
 	    URL url = null;
@@ -81,10 +88,10 @@ public class MenuState extends State {
 					handler.getGame().socketServer.start();
 				handler.getGame().socketClient = new Client(handler.getGame(), networkUtil.getCurrentEnvironmentNetworkIp());
 				handler.getGame().socketClient.start();
-				Map map = new Map(handler,"res/map/map1.txt");
+				Map map = new Map(handler,"/map/map1.txt");
 				handler.setMap(map);
 				String name = "Player Name";
-				String input = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter a user name: ");
+				String input = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), getPanel(), "Please Enter a user name: ", JOptionPane.PLAIN_MESSAGE);
 				name = input == null ? name : input;
 				handler.getGame().player = new ClientPlayer(handler, handler.getKeyManager(),100, 100, 50, 50, 
 						name, null, -1, -1);
@@ -110,7 +117,7 @@ public class MenuState extends State {
 			}else {
 				JOptionPane.showMessageDialog(handler.getGame().getWindow().getFrame(), "Server is already running" , "", JOptionPane.WARNING_MESSAGE);
 			}
-			
+	
 				
 			}}));
 		
@@ -119,7 +126,7 @@ public class MenuState extends State {
 			@Override
 			public void onClick() {
 				Pattern ptn = Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$");
-				String ip = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter remote IP address: ");
+				String ip = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), getPanel(), "Please Enter remote IP address: ", JOptionPane.PLAIN_MESSAGE);
 				Matcher mtch = ptn.matcher(ip);
 //				while(! mtch.find() ) {
 //					JOptionPane.showMessageDialog(handler.getGame().getWindow().getFrame(), "Input Valid Ip Address" , "", JOptionPane.WARNING_MESSAGE);
@@ -132,7 +139,7 @@ public class MenuState extends State {
 					handler.getGame().windowHandler = new WindowHandler(handler.getGame());
 					Map map = new Map(handler,"res/map/map1.txt");
 					String name = "No Name";
-					String input = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), "Please Enter a user name: ");
+					String input = JOptionPane.showInputDialog(handler.getGame().getWindow().getFrame(), getPanel(), "Please Enter a user name: ", JOptionPane.PLAIN_MESSAGE);
 					name = input == null ? name : input;
 					handler.getGame().player = new ClientPlayer(handler, handler.getKeyManager(),100, 100, 50, 50, 
 							name, null, -1, -1);
@@ -197,5 +204,16 @@ public class MenuState extends State {
 	public void update() {
 	   uiManager.update();
 	}
+	
+	 private JPanel getPanel() {
+	        JPanel panel = new JPanel();
+	        ImageIcon image = null;
+	        panel.setSize(200,200);
+
+	    
+
+	        return panel;
+	    }
+
 
 }

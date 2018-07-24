@@ -71,6 +71,9 @@ public class WaitingState extends State {
 			@Override
 			public void onClick() {
 				int isServer = handler.getGame().isServer ? 1 : 0;
+				if(isServer == 1) {
+					handler.getGame().socketServer.id = 0L;
+				}
 				Packet11QUIT quit = new Packet11QUIT((int)(handler.getGame().player.id), isServer);
 				quit.writeData(handler.getGame().socketClient);
 				State.setState(new MenuState(handler));
