@@ -26,7 +26,7 @@ public class HelpState extends State{
 	   uiManager = new UIManager(handler);
 	   handler.getMouseManager().setUIManager(uiManager);
 	   
-	   uiManager.addObject(new ImageButton(50,180 , 32,32, Assets.back2, new ClickListener(){
+	   uiManager.addObject(new ImageButton(50,360 , 135,65, Assets.back2, new ClickListener(){
 			
 			@Override
 			public void onClick() {
@@ -41,9 +41,9 @@ public class HelpState extends State{
 
 	@Override
 	public void render(Graphics g) {
-		g.clearRect(0, 0, 480, 256);
-		g.drawImage(image, 0, 0, 480, 256, null);
-		g.drawImage(help, 0, 0, 480, 256, null);
+		g.clearRect(0, 0, 640, 480);
+		g.drawImage(image, 0, 0, 640, 480, null);
+		g.drawImage(help, 0, 0, 640, 480, null);
 		g.setFont(new Font("default", Font.BOLD, 16));
 		g.setColor(Color.BLACK);
 		uiManager.render(g);
