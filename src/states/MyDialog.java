@@ -1,33 +1,64 @@
 package states;
 
-import java.awt.Color;
-import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JWindow;
 
-public class MyDialog extends JDialog{
+public class MyDialog extends JDialog {
+
+	private JLabel jLabel;
+	private JButton yesButton;
+	private JButton noButton;
+	private ImageIcon bg;
 	
-	public MyDialog(JFrame frame,String message) {	
-	     super(frame);
-	     setLayout(new FlowLayout());
+	public MyDialog() {
+		setUndecorated(true);
+		setSize(200, 200);
+		setLocationRelativeTo(null);
+		setVisible(false);
 		
-		 setUndecorated(true);
-		 setSize(300,100);
+		jLabel = new JLabel("Return to Main Menu?");
+		jLabel.setBounds(24, 63, 151, 21);
+		jLabel.setFont(new Font("Dialog", Font.PLAIN, 16));
 		
-//		 toFront();
+		yesButton = new JButton("YES");
+		yesButton.setBounds(48, 114, 51, 23);
+		modifyButton(yesButton);
 		
-		 JLabel label = new JLabel("message");   
-	     JTextField input = new JTextField(10);
-	     JButton button  = new JButton("OK");
-	     setBounds(250,128,300,100);
-	     add(label);
-		 add(input);
-		 add(button);
+		noButton = new JButton("NO");
+		noButton.setBounds(104, 114, 47, 23);
+		modifyButton(noButton);
+		
+		getContentPane().setLayout(null);	
+		getContentPane().add(jLabel);
+		getContentPane().add(yesButton);
+		getContentPane().add(noButton);
+	}
 
-    }
+	public JButton getYesButton() {
+		return yesButton;
+	}
+
+	public void setYesButton(JButton yesButton) {
+		this.yesButton = yesButton;
+	}
+
+	public JButton getNoButton() {
+		return noButton;
+	}
+
+	public void setNoButton(JButton noButton) {
+		this.noButton = noButton;
+	}
+	
+	public void modifyButton(JButton button) {
+		button.setOpaque(false);
+		button.setContentAreaFilled(false);
+		button.setBorderPainted(false);
+		button.setFocusable(false);
+	}
 }

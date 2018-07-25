@@ -1,6 +1,8 @@
 package network;
 
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -34,6 +36,22 @@ public class Client extends Thread{
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
+		game.backDialog.getNoButton().addActionListener(new ActionListener()
+		{
+			  public void actionPerformed(ActionEvent e)
+			  {
+				  game.backDialog.setVisible(false);
+			  }
+		});
+		
+		game.backDialog.getYesButton().addActionListener(new ActionListener()
+		{
+			  public void actionPerformed(ActionEvent e)
+			  {
+				  backToMenu();
+				  game.backDialog.setVisible(false);
+			  }
+		});
 		
 	}
 	
@@ -111,7 +129,8 @@ public class Client extends Thread{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-			   	  backToMenu();
+			   	 
+			   	  game.backDialog.setVisible(true);
 		    	break;
 		    case Letter:	
 		    	Packet07Letter letter = new Packet07Letter(data);

@@ -2,6 +2,8 @@ package main;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JOptionPane;
@@ -17,12 +19,15 @@ import network.Packet00Login;
 import network.Server;
 import states.GameState;
 import states.HelpState;
+import states.InputDialog;
 import states.MenuState;
+import states.MyDialog;
 import states.State;
 
 public class Game implements Runnable {
 	
 	private GameWindow window;
+	public MyDialog backDialog;
 	private String title;
 	private int height,width;
 	private Thread thread;
@@ -44,6 +49,7 @@ public class Game implements Runnable {
 	//
 	private GameCamera gameCamera;
 	private Handler handler;
+	private InputDialog inputdialog;
 	
 	public Client socketClient;
 	public Server socketServer = null;
@@ -56,8 +62,8 @@ public class Game implements Runnable {
 		this.title = title;
 		keyManager = new KeyManager();
 		mouseManager = new MouseManager();
+		backDialog = new MyDialog();
 		init();
-		
 	}
 
 
@@ -116,7 +122,6 @@ public class Game implements Runnable {
 		gameState = new GameState(handler);
 		menuState = new MenuState(handler);
 		State.setState(menuState);
-		
 	}
 	
 	
