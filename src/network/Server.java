@@ -24,6 +24,7 @@ public class Server extends Thread{
 	private DatagramSocket socket;
 	private Game game;
 	public int humans = 0, letters;
+	public int currentPick = -1;
 	public List<ClientPlayer> connectedPlayers = new ArrayList<ClientPlayer>();
 	public long id = 0L;
 	private List<Rectangle> rectangles ;
@@ -108,14 +109,20 @@ public class Server extends Thread{
 		    	}
 		    	break;
 		    case PICK:	
-		    	letters -=1 ;
+		    
 	    		Packet10PICK pick = new Packet10PICK(data);
-	    		pick.noLetters = letters;
-	    		pick.writeData(this);
-	    		if(letters == 0) {
-		    		Packet06WIN win = new Packet06WIN(1);
-		    		win.writeData(this);
-		    	}
+	    		
+	    		System.out.println(pick.letterId);
+	    		if(pick.letterId != currentPick) {
+	    			letters -= 1;
+	    			pick.noLetters = letters;
+		    		pick.writeData(this);
+		    		if(letters == 0) {
+			    		Packet06WIN win = new Packet06WIN(1);
+			    		win.writeData(this);
+			    	}
+		    		currentPick = pick.letterId;
+	    		}
 		    	break;
 		    case QUIT:
 		    	Packet11QUIT quit = new Packet11QUIT(data);
@@ -258,6 +265,7 @@ public class Server extends Thread{
 	public int SlenderId() {	
 		Random rand = new Random(); 
 		humans = connectedPlayers.size() - 1;
+		currentPick = -1;
 		return rand.nextInt(connectedPlayers.size()); 
 	}
 }

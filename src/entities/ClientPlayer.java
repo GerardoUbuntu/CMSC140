@@ -152,7 +152,7 @@ public class ClientPlayer extends Creature implements Comparable<ClientPlayer> {
 //	    	  yPoly = new int[]{(int) (y - handler.getGameCamera().getyOffset()) -84,(int) (y - handler.getGameCamera().getyOffset()) + 16, (int) (y - handler.getGameCamera().getyOffset()) + 116};
 //	      }
 //		  a.subtract(new Area(new Polygon(xPoly,yPoly, 3)));
-		   Area a = new Area(new Rectangle(0, 0, 480, 256));
+		   Area a = new Area(new Rectangle(0, 0, 640, 480));
 		  
 		  if(type == 1 && slowdown) {
 			  this.saveSpeed = this.speed;
@@ -205,12 +205,12 @@ public class ClientPlayer extends Creature implements Comparable<ClientPlayer> {
 	
 	 private void addStats(Graphics g) {
 		 if(type == 0) {
-			 Text.drawString(g, "P:" + handler.getGame().noPlayers, 350, 20, false, Color.BLUE, Assets.silk20);
-			 Text.drawString(g, "H:" + this.DEFAULT_HEALTH, 390, 20, false, Color.RED, Assets.silk20);
-			 Text.drawString(g, "L:" + handler.getGame().noLetters, 430, 20, false, Color.YELLOW, Assets.silk20);
+			 Text.drawString(g, "P:" + handler.getGame().noPlayers, 510, 20, false, Color.BLUE, Assets.silk20);
+			 Text.drawString(g, "H:" + this.DEFAULT_HEALTH, 550, 20, false, Color.RED, Assets.silk20);
+			 Text.drawString(g, "L:" + handler.getGame().noLetters, 590, 20, false, Color.YELLOW, Assets.silk20);
 		 }else {
-			 Text.drawString(g, "P:" + handler.getGame().noPlayers, 390, 20, false, Color.BLUE, Assets.silk20);
-			 Text.drawString(g, "L:" + handler.getGame().noLetters, 430, 20, false, Color.YELLOW, Assets.silk20);
+			 Text.drawString(g, "P:" + handler.getGame().noPlayers, 550, 20, false, Color.BLUE, Assets.silk20);
+			 Text.drawString(g, "L:" + handler.getGame().noLetters, 590, 20, false, Color.YELLOW, Assets.silk20);
 		 }
 	 }
 

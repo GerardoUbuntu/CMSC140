@@ -28,6 +28,7 @@ public class Game implements Runnable {
 	
 	private GameWindow window;
 	public MyDialog backDialog;
+	public InputDialog inputDialog;
 	private String title;
 	private int height,width;
 	private Thread thread;
@@ -62,7 +63,7 @@ public class Game implements Runnable {
 		this.title = title;
 		keyManager = new KeyManager();
 		mouseManager = new MouseManager();
-		backDialog = new MyDialog();
+		
 		init();
 	}
 
@@ -118,7 +119,8 @@ public class Game implements Runnable {
 		handler = new Handler(this);
 		gameCamera = new GameCamera(handler,0,0);
 		Assets.init();
-		
+		backDialog = new MyDialog(window.getFrame());
+		inputDialog = new InputDialog();
 		gameState = new GameState(handler);
 		menuState = new MenuState(handler);
 		State.setState(menuState);

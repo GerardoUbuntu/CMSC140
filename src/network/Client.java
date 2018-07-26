@@ -36,22 +36,9 @@ public class Client extends Thread{
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		game.backDialog.getNoButton().addActionListener(new ActionListener()
-		{
-			  public void actionPerformed(ActionEvent e)
-			  {
-				  game.backDialog.setVisible(false);
-			  }
-		});
+	
 		
-		game.backDialog.getYesButton().addActionListener(new ActionListener()
-		{
-			  public void actionPerformed(ActionEvent e)
-			  {
-				  backToMenu();
-				  game.backDialog.setVisible(false);
-			  }
-		});
+	
 		
 	}
 	
@@ -129,8 +116,20 @@ public class Client extends Thread{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-			   	 
+			   	  if(game.winner == 1) {
+			   		  game.backDialog.getLabel().setText("Humans Wins");
+			   	  }else if(game.winner == 2) {
+			   		 game.backDialog.getLabel().setText("SlenderMan Wins");
+			   	  }
 			   	  game.backDialog.setVisible(true);
+				  game.backDialog.getYesButton().addActionListener(new ActionListener()
+				  {
+						  public void actionPerformed(ActionEvent e)
+						  {
+							  backToMenu();
+							  game.backDialog.setVisible(false);
+						  }
+					});
 		    	break;
 		    case Letter:	
 		    	Packet07Letter letter = new Packet07Letter(data);
@@ -222,6 +221,7 @@ public class Client extends Thread{
 	    	game.socketServer.id = 0L;
 	    	game.socketServer.letterId = 0L;
 	    }
+		game.noLetters = 10;
 		game.socketClient = null;
 		game.winner = 0;	
 		game.getHandler().getMap().getEntityManager().getEntities().clear();

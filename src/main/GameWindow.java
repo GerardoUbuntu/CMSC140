@@ -41,6 +41,8 @@ public class GameWindow {
 		canvas.setBounds(0,0, width, height);
 //		layeredPane.add(imagePanel, 1);
 		layeredPane.add(canvas, 0);
+		ImageIcon img = new ImageIcon(getClass().getResource("/images/Photos/s.png"));
+		frame.setIconImage(img.getImage());
 		frame.add(layeredPane);
 	
 		frame.pack();
